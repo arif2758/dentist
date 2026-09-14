@@ -100,16 +100,28 @@ export function AppointmentBooking() {
     formData.set("gender", gender);
     formData.set("notes", notes);
 
+    // Instant 0ms visual feedback so the patient never feels delayed or confused
+    const toastId = toast.loading("সিরিয়াল বুকিং প্রসেস করা হচ্ছে...", {
+      description: "দয়া করে এক মুহূর্ত অপেক্ষা করুন...",
+    });
+
     try {
       const result = await createAppointmentAction(null, formData);
       if (result.success && result.data) {
         setConfirmedAppointment(result.data);
-        toast.success(result.message);
+        toast.success(result.message, {
+          id: toastId,
+          description: `টোকেন #${result.data.tokenNumber} সফলভাবে নিশ্চিত হয়েছে।`,
+        });
       } else {
-        toast.error(result.error || "সিরিয়াল বুকিং করা সম্ভব হয়নি।");
+        toast.error(result.error || "সিরিয়াল বুকিং করা সম্ভব হয়নি।", {
+          id: toastId,
+        });
       }
     } catch {
-      toast.error("সার্ভার সমস্যা। অনুগ্রহ করে পুনরায় চেষ্টা করুন।");
+      toast.error("সার্ভার সমস্যা। অনুগ্রহ করে পুনরায় চেষ্টা করুন।", {
+        id: toastId,
+      });
     } finally {
       setIsSubmitting(false);
     }

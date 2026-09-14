@@ -8,7 +8,10 @@ import { QueueModel } from "@/models/Queue";
 import { generatePatientId } from "@/lib/patientId";
 import { clinicStore } from "@/lib/store";
 
-export async function createAppointmentAction(prevState: any, formData: FormData) {
+export async function createAppointmentAction(
+  prevState: unknown,
+  formData: FormData
+) {
   try {
     const patientName = (formData.get("patientName") as string)?.trim();
     const phone = (formData.get("phone") as string)?.trim();
@@ -31,16 +34,17 @@ export async function createAppointmentAction(prevState: any, formData: FormData
     try {
       await connectDB();
 
-      // 1. Calculate next token number for the specified date
+      // 1. Fast indexed seek for the highest token number for the date
       const lastAppointment = await Appointment.findOne({ appointmentDate })
         .sort({ tokenNumber: -1 })
+        .select("tokenNumber")
         .lean();
 
       const nextTokenNumber = (lastAppointment?.tokenNumber || 0) + 1;
       const appointmentId = `APT-${Date.now().toString().slice(-6)}`;
 
-      // 2. Create Appointment in MongoDB
-      const created = await Appointment.create({
+      // 2. Prepare concurrent database promises
+      const appointmentPromise = Appointment.create({
         appointmentId,
         tokenNumber: nextTokenNumber,
         patientName,
@@ -54,40 +58,46 @@ export async function createAppointmentAction(prevState: any, formData: FormData
         notes,
       });
 
-      // 3. Ensure or update Patient record in MongoDB
-      const existingPatient = await Patient.findOne({ phone });
-      if (!existingPatient) {
-        const patientId = await generatePatientId(new Date(appointmentDate));
-        await Patient.create({
-          patientId,
-          patientName,
-          phone,
-          age,
-          gender,
-          bloodGroup: "O+",
-          medicalAlerts: [],
-          toothConditions: {},
-          visits: [],
-          lastVisitDate: appointmentDate,
-          nextRecallDate: "",
-          recallStatus: "SCHEDULED",
-        });
-      } else {
-        existingPatient.lastVisitDate = appointmentDate;
-        await existingPatient.save();
-      }
-
-      // 4. Update QueueModel total tokens today
-      const totalToday = await Appointment.countDocuments({
-        appointmentDate,
-      });
-      await QueueModel.findOneAndUpdate(
+      // 3. Concurrent QueueModel update (no need for countDocuments since nextTokenNumber is known)
+      const queuePromise = QueueModel.findOneAndUpdate(
         { queueId: "main_opd_queue" },
-        { totalTokensToday: totalToday, lastUpdated: new Date() },
+        { totalTokensToday: nextTokenNumber, lastUpdated: new Date() },
         { upsert: true }
       );
 
-      // Also keep clinicStore in sync as a hot fallback
+      // 4. Concurrent Patient record check & update/create
+      const patientPromise = (async () => {
+        const existingPatient = await Patient.findOne({ phone }).select("lastVisitDate");
+        if (!existingPatient) {
+          const patientId = await generatePatientId(new Date(appointmentDate));
+          return Patient.create({
+            patientId,
+            patientName,
+            phone,
+            age,
+            gender,
+            bloodGroup: "O+",
+            medicalAlerts: [],
+            toothConditions: {},
+            visits: [],
+            lastVisitDate: appointmentDate,
+            nextRecallDate: "",
+            recallStatus: "SCHEDULED",
+          });
+        } else {
+          existingPatient.lastVisitDate = appointmentDate;
+          return existingPatient.save();
+        }
+      })();
+
+      // 5. Execute all DB writes in parallel for lightning-fast latency
+      const [created] = await Promise.all([
+        appointmentPromise,
+        queuePromise,
+        patientPromise,
+      ]);
+
+      // Synchronize in-memory fallback store
       clinicStore.bookAppointment({
         patientName,
         phone,
@@ -99,11 +109,9 @@ export async function createAppointmentAction(prevState: any, formData: FormData
         notes,
       });
 
-      revalidatePath("/");
-      revalidatePath("/book");
-      revalidatePath("/live-queue");
+      // Revalidate only essential active pages to minimize serverless response latency
       revalidatePath("/admin");
-      revalidatePath("/display");
+      revalidatePath("/live-queue");
 
       return {
         success: true,
@@ -123,7 +131,7 @@ export async function createAppointmentAction(prevState: any, formData: FormData
         },
         message: `অভিনন্দন! আপনার সিরিয়াল টোকেন নং #${created.tokenNumber} সফলভাবে বুক হয়েছে।`,
       };
-    } catch (dbErr: any) {
+    } catch (dbErr: unknown) {
       console.warn("MongoDB connection issue during booking, falling back to store:", dbErr);
       const result = clinicStore.bookAppointment({
         patientName,
@@ -145,10 +153,11 @@ export async function createAppointmentAction(prevState: any, formData: FormData
         message: `অভিনন্দন! আপনার সিরিয়াল টোকেন নং #${result.appointment.tokenNumber} সফলভাবে বুক হয়েছে।`,
       };
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "সিরিয়াল বুকিং সম্পন্ন করা যায়নি। পুনরায় চেষ্টা করুন।";
     return {
       success: false,
-      error: error.message || "সিরিয়াল বুকিং সম্পন্ন করা যায়নি। পুনরায় চেষ্টা করুন।",
+      error: message,
     };
   }
 }

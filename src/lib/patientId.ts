@@ -17,21 +17,20 @@ export async function generatePatientId(date: Date = new Date()): Promise<string
   const dd = String(validDate.getDate()).padStart(2, "0");
   const prefix = `${yy}${mm}${dd}`;
 
-  // Find all patient IDs starting with this day's prefix
+  // Find latest patient ID for today using fast index sort
   const regex = new RegExp(`^${prefix}-\\d+`);
-  const patientsToday = await Patient.find({ patientId: regex })
+  const latestPatient = await Patient.findOne({ patientId: regex })
+    .sort({ patientId: -1 })
     .select("patientId")
     .lean();
 
   let maxSeq = 0;
-  for (const p of patientsToday) {
-    if (p.patientId) {
-      const parts = p.patientId.split("-");
-      if (parts.length >= 2) {
-        const seq = parseInt(parts[1], 10);
-        if (!isNaN(seq) && seq > maxSeq) {
-          maxSeq = seq;
-        }
+  if (latestPatient?.patientId) {
+    const parts = latestPatient.patientId.split("-");
+    if (parts.length >= 2) {
+      const seq = parseInt(parts[1], 10);
+      if (!isNaN(seq)) {
+        maxSeq = seq;
       }
     }
   }
