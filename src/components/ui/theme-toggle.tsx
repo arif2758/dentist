@@ -7,7 +7,13 @@ import { Button } from "@/components/ui/button";
 
 const emptySubscribe = () => () => {};
 
-export function ThemeToggle() {
+export function ThemeToggle({
+  className,
+  iconClassName,
+}: {
+  className?: string;
+  iconClassName?: string;
+} = {}) {
   const { theme, resolvedTheme, setTheme } = useTheme();
   const mounted = React.useSyncExternalStore(
     emptySubscribe,
@@ -17,27 +23,30 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" className="w-9 h-9 opacity-70">
-        <Sun className="h-4 w-4" />
-      </Button>
+      <button
+        type="button"
+        aria-label="Toggle theme"
+        className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center p-0 opacity-70 border border-transparent ${className || ""}`}
+      >
+        <Sun className={`h-5 w-5 ${iconClassName || ""}`} />
+      </button>
     );
   }
 
   const isDark = (resolvedTheme || theme) === "dark";
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
+    <button
+      type="button"
       aria-label="Toggle theme"
-      className="w-9 h-9 rounded-full hover:bg-blue-500/10 transition-colors"
+      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center p-0 border border-[var(--antd-border-split)] bg-[var(--antd-bg-container)] hover:bg-[var(--antd-bg-layout)] text-[var(--antd-text)] transition-all cursor-pointer shadow-xs ${className || ""}`}
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
       {isDark ? (
-        <Sun className="h-4 w-4 text-amber-400 transition-transform rotate-0 scale-100" />
+        <Sun className={`h-5 w-5 text-amber-400 hover:text-amber-300 transition-transform hover:rotate-12 ${iconClassName || ""}`} />
       ) : (
-        <Moon className="h-4 w-4 text-slate-700 transition-transform rotate-0 scale-100" />
+        <Moon className={`h-5 w-5 text-slate-700 dark:text-slate-200 hover:text-slate-900 transition-transform hover:-rotate-12 ${iconClassName || ""}`} />
       )}
-    </Button>
+    </button>
   );
 }

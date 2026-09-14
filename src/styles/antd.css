@@ -137,6 +137,36 @@ a {
 }
 
 /* ==========================================================================
+   Admin 2-Layer Navbar Links & Capsule Tabs
+   ========================================================================== */
+.admin-nav-link {
+  color: var(--antd-text-secondary) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+.admin-nav-link:hover {
+  color: var(--antd-text) !important;
+  background-color: var(--antd-bg-layout) !important;
+}
+.admin-tab-pill {
+  color: var(--antd-text-secondary) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+.admin-tab-pill:hover {
+  color: var(--antd-text) !important;
+  background-color: var(--antd-bg-container) !important;
+}
+.admin-tab-pill.active {
+  background: #1677ff !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(22, 119, 255, 0.3) !important;
+}
+.admin-tab-pill.active * {
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
    Ant Design Buttons (.antd-btn)
    ========================================================================== */
 .antd-btn {
@@ -313,6 +343,14 @@ a.antd-btn-dashed:hover:not(:disabled) {
 .antd-input:focus {
   border-color: var(--antd-primary);
   box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.15);
+}
+
+.antd-input-has-prefix {
+  padding-left: 38px !important;
+}
+
+.antd-input-has-suffix {
+  padding-right: 38px !important;
 }
 
 /* ==========================================================================
@@ -919,8 +957,155 @@ html.dark .dashboard-nav-item.dashboard-nav-item-active:hover,
   color: #60a5fa !important;
 }
 
+/* ==========================================================================
+   Admin 2-Layer Navbar & Navigation Links (Overrides Antd global a { color: ... })
+   ========================================================================== */
 
+/* Top Quick Nav Links */
+a.admin-nav-link,
+.admin-nav-link {
+  color: #64748b !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
 
+a.admin-nav-link:hover,
+.admin-nav-link:hover {
+  color: #0f172a !important;
+  background-color: #f1f5f9 !important;
+}
 
+a.admin-nav-link *,
+.admin-nav-link * {
+  color: inherit !important;
+}
 
+.dark a.admin-nav-link,
+.dark .admin-nav-link {
+  color: #94a3b8 !important;
+}
 
+.dark a.admin-nav-link:hover,
+.dark .admin-nav-link:hover {
+  color: #ffffff !important;
+  background-color: #1e293b !important;
+}
+
+/* Top Quick TV Button */
+a.admin-tv-link,
+.admin-tv-link {
+  color: #2563eb !important;
+  background-color: rgba(37, 99, 235, 0.08) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+a.admin-tv-link:hover,
+.admin-tv-link:hover {
+  color: #1d4ed8 !important;
+  background-color: rgba(37, 99, 235, 0.16) !important;
+}
+
+.dark a.admin-tv-link,
+.dark .admin-tv-link {
+  color: #60a5fa !important;
+  background-color: rgba(96, 165, 250, 0.12) !important;
+}
+
+.dark a.admin-tv-link:hover,
+.dark .admin-tv-link:hover {
+  color: #93c5fd !important;
+  background-color: rgba(96, 165, 250, 0.22) !important;
+}
+
+/* Layer 2 Tag-Style Nav Items (Chip / Tag Pills matching mockup) */
+a.admin-tab-pill,
+.admin-tab-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #475569 !important;
+  background-color: transparent !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 9999px !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+a.admin-tab-pill:hover,
+.admin-tab-pill:hover {
+  color: #0f172a !important;
+  background-color: rgba(0, 0, 0, 0.04) !important;
+  border-color: #94a3b8 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+
+a.admin-tab-pill *,
+.admin-tab-pill * {
+  color: inherit !important;
+}
+
+.dark a.admin-tab-pill,
+.dark .admin-tab-pill {
+  color: #e2e8f0 !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+}
+
+.dark a.admin-tab-pill:hover,
+.dark .admin-tab-pill:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Active Tag Pill */
+a.admin-tab-pill.active,
+.admin-tab-pill.active {
+  background-color: #1677ff !important;
+  border-color: #1677ff !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(22, 119, 255, 0.4) !important;
+}
+
+a.admin-tab-pill.active *,
+.admin-tab-pill.active * {
+  color: #ffffff !important;
+}
+
+/* Mobile Drawer Links */
+a.admin-drawer-link,
+.admin-drawer-link {
+  color: #334155 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+a.admin-drawer-link:hover,
+.admin-drawer-link:hover {
+  color: #0f172a !important;
+  background-color: #f1f5f9 !important;
+}
+
+.dark a.admin-drawer-link,
+.dark .admin-drawer-link {
+  color: #cbd5e1 !important;
+}
+
+.dark a.admin-drawer-link:hover,
+.dark .admin-drawer-link:hover {
+  color: #ffffff !important;
+  background-color: #1e293b !important;
+}
+
+a.admin-drawer-link.active,
+.admin-drawer-link.active {
+  background-color: #1677ff !important;
+  color: #ffffff !important;
+}
+
+a.admin-drawer-link.active *,
+.admin-drawer-link.active * {
+  color: #ffffff !important;
+}

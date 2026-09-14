@@ -38,6 +38,8 @@ function AntdThemeBridge({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { SessionProvider } from "next-auth/react";
+
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
     () =>
@@ -52,13 +54,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
-      <QueryClientProvider client={queryClient}>
-        <AntdRegistry>
-          <AntdThemeBridge>{children}</AntdThemeBridge>
-        </AntdRegistry>
-      </QueryClientProvider>
-    </NextThemesProvider>
+    <SessionProvider>
+      <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
+        <QueryClientProvider client={queryClient}>
+          <AntdRegistry>
+            <AntdThemeBridge>{children}</AntdThemeBridge>
+          </AntdRegistry>
+        </QueryClientProvider>
+      </NextThemesProvider>
+    </SessionProvider>
   );
 }
 

@@ -10,26 +10,6 @@ export async function GET(req: Request) {
   try {
     await connectDB();
 
-    const count = await Appointment.countDocuments();
-    if (count === 0) {
-      const initialSeed = clinicStore.getQueue().activeQueueList;
-      for (const a of initialSeed) {
-        await Appointment.create({
-          appointmentId: a.id,
-          tokenNumber: a.tokenNumber,
-          patientName: a.patientName,
-          phone: a.phone,
-          age: a.age,
-          gender: a.gender,
-          serviceType: a.serviceType,
-          appointmentDate: a.appointmentDate,
-          timeSlot: a.timeSlot,
-          status: a.status,
-          notes: a.notes,
-        });
-      }
-    }
-
     const list = await Appointment.find({ appointmentDate: date }).sort({ tokenNumber: 1 }).lean();
     return NextResponse.json({
       success: true,

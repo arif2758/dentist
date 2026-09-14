@@ -118,7 +118,7 @@ const initialAppointments: Appointment[] = [
 // Realistic Patient Records with 6-month & overdue history
 const initialPatients: PatientRecord[] = [
   {
-    id: "pat-101",
+    id: "260914-001",
     patientName: "মো: জামিল হোসেন",
     phone: "01712345678",
     age: 42,
@@ -149,7 +149,7 @@ const initialPatients: PatientRecord[] = [
     ],
   },
   {
-    id: "pat-102",
+    id: "260914-002",
     patientName: "শাহনাজ পারভীন",
     phone: "01823456789",
     age: 36,
@@ -180,7 +180,7 @@ const initialPatients: PatientRecord[] = [
     ],
   },
   {
-    id: "pat-103",
+    id: "260914-003",
     patientName: "সাব্বির আহমেদ",
     phone: "01934567890",
     age: 26,
@@ -206,7 +206,7 @@ const initialPatients: PatientRecord[] = [
     ],
   },
   {
-    id: "pat-104",
+    id: "260914-004",
     patientName: "মো: রফিকুল ইসলাম",
     phone: "01711223344",
     age: 45,
@@ -415,8 +415,11 @@ export const clinicStore = {
       (p) => p.phone === data.phone,
     );
     if (!existingPatient) {
+      const d = new Date(data.appointmentDate || Date.now());
+      const prefix = `${String(d.getFullYear()).slice(-2)}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+      const seq = String(globalStore.__DENTIST_PATIENTS__!.length + 1).padStart(3, "0");
       globalStore.__DENTIST_PATIENTS__!.push({
-        id: `pat-${Date.now()}`,
+        id: `${prefix}-${seq}`,
         patientName: data.patientName,
         phone: data.phone,
         age: data.age,

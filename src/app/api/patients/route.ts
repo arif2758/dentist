@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { Patient } from "@/models/Patient";
 import { clinicStore } from "@/lib/store";
+import { generatePatientId, normalizeLegacyPatientIds } from "@/lib/patientId";
 
 function parseToothConditions(raw: unknown): Record<string, unknown> {
   if (!raw) return {};
@@ -19,31 +20,13 @@ export async function GET(req: Request) {
   const phone = searchParams.get("phone");
   const id = searchParams.get("id");
   const overdueOnly = searchParams.get("overdue") === "true";
+  const recallsOnly = searchParams.get("recalls") === "true";
 
   try {
     await connectDB();
 
-    // Auto-seed if collection is empty
-    const count = await Patient.countDocuments();
-    if (count === 0) {
-      const initialSeed = clinicStore.getPatients();
-      for (const p of initialSeed) {
-        await Patient.create({
-          patientId: p.id,
-          patientName: p.patientName,
-          phone: p.phone,
-          age: p.age,
-          gender: p.gender,
-          bloodGroup: p.bloodGroup,
-          medicalAlerts: p.medicalAlerts,
-          visits: p.visits,
-          lastVisitDate: p.lastVisitDate,
-          nextRecallDate: p.nextRecallDate,
-          recallStatus: p.recallStatus,
-          recallNotes: p.recallNotes,
-        });
-      }
-    }
+    // Ensure any existing legacy records conform to yymmdd-xxx
+    await normalizeLegacyPatientIds();
 
     if (id) {
       const patient = await Patient.findOne({ patientId: id }).lean();
@@ -96,11 +79,39 @@ export async function GET(req: Request) {
       });
     }
 
-    if (overdueOnly) {
-      const overdueList = await Patient.find({ recallStatus: "OVERDUE" }).lean();
-      return NextResponse.json({
-        success: true,
-        data: overdueList.map((p) => ({
+    if (recallsOnly || overdueOnly) {
+      const todayStr = new Date().toISOString().split("T")[0];
+      const todayTime = new Date(todayStr).getTime();
+
+      let queryFilter: any = { nextRecallDate: { $exists: true, $ne: "" } };
+      if (overdueOnly) {
+        queryFilter = {
+          $or: [
+            { recallStatus: "OVERDUE" },
+            {
+              nextRecallDate: { $exists: true, $ne: "", $lte: todayStr },
+              recallStatus: { $ne: "CONTACTED" },
+            },
+          ],
+        };
+      }
+
+      const list = await Patient.find(queryFilter).lean();
+
+      const mappedList = list.map((p) => {
+        const recallTime = p.nextRecallDate ? new Date(p.nextRecallDate).getTime() : 0;
+        const diffDays = Math.round((recallTime - todayTime) / (1000 * 60 * 60 * 24));
+        const isOverdue =
+          p.recallStatus === "OVERDUE" ||
+          (Boolean(p.nextRecallDate) && p.nextRecallDate < todayStr && p.recallStatus !== "CONTACTED");
+
+        let status = p.recallStatus;
+        if (p.recallStatus !== "CONTACTED") {
+          if (isOverdue) status = "OVERDUE";
+          else status = "SCHEDULED";
+        }
+
+        return {
           id: p.patientId,
           patientName: p.patientName,
           phone: p.phone,
@@ -112,9 +123,25 @@ export async function GET(req: Request) {
           visits: p.visits,
           lastVisitDate: p.lastVisitDate,
           nextRecallDate: p.nextRecallDate,
-          recallStatus: p.recallStatus,
+          recallStatus: status,
           recallNotes: p.recallNotes,
-        })),
+          diffDays,
+        };
+      });
+
+      // Sort: যারটা যত কাছে তারটা তত উপরে থাকবে
+      mappedList.sort((a, b) => {
+        const distA = Math.abs(a.diffDays);
+        const distB = Math.abs(b.diffDays);
+        if (distA !== distB) {
+          return distA - distB; // Closest to today comes first (0, 1, 2, 3...)
+        }
+        return b.diffDays - a.diffDays;
+      });
+
+      return NextResponse.json({
+        success: true,
+        data: mappedList,
       });
     }
 
@@ -160,13 +187,18 @@ export async function GET(req: Request) {
 export async function PATCH(req: Request) {
   try {
     const body = await req.json();
-    const { patientId, status, note } = body;
+    const { patientId, status, note, nextRecallDate } = body;
 
     try {
       await connectDB();
+      const updateFields: Record<string, any> = {};
+      if (status) updateFields.recallStatus = status;
+      if (note !== undefined) updateFields.recallNotes = note;
+      if (nextRecallDate) updateFields.nextRecallDate = nextRecallDate;
+
       const updated = await Patient.findOneAndUpdate(
         { patientId },
-        { recallStatus: status, recallNotes: note },
+        { $set: updateFields },
         { new: true }
       );
       if (updated) {

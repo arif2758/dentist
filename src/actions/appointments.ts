@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import { Appointment } from "@/models/Appointment";
 import { Patient } from "@/models/Patient";
+import { generatePatientId } from "@/lib/patientId";
 import { ActionResponse, Appointment as AppointmentType, AppointmentStatus, Gender } from "@/types";
 
 export interface BookAppointmentInput {
@@ -50,7 +51,7 @@ export async function bookAppointmentAction(
     // Also ensure or update Patient Record in DB
     const existingPatient = await Patient.findOne({ phone: input.phone });
     if (!existingPatient) {
-      const patientId = `P-${Math.floor(100 + Math.random() * 900)}`;
+      const patientId = await generatePatientId(new Date(todayStr));
       await Patient.create({
         patientId,
         patientName: input.patientName,

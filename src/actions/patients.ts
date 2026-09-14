@@ -177,3 +177,44 @@ export async function updateToothConditionAction(
     };
   }
 }
+
+export async function updatePatientRecallAction(
+  patientId: string,
+  nextRecallDate: string,
+  recallNotes?: string,
+  recallStatus: "SCHEDULED" | "OVERDUE" | "CONTACTED" | "PENDING" = "SCHEDULED"
+): Promise<ActionResponse> {
+  try {
+    await connectDB();
+    const updated = await Patient.findOneAndUpdate(
+      { patientId },
+      {
+        $set: {
+          nextRecallDate,
+          recallNotes: recallNotes || "",
+          recallStatus,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updated) {
+      return { success: false, message: "রোগীর রেকর্ড পাওয়া যায়নি।" };
+    }
+
+    revalidatePath(`/admin/patients/${patientId}`);
+    revalidatePath("/admin/recalls");
+    revalidatePath("/admin/patients");
+
+    return {
+      success: true,
+      message: "ফলো-আপ শিডিউল সফলভাবে আপডেট করা হয়েছে!",
+    };
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: "ফলো-আপ শিডিউল আপডেট করা সম্ভব হয়নি।",
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}

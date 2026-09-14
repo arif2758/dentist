@@ -1,6 +1,6 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# ==========================================
+# Dependencies
+# ==========================================
 /node_modules
 /.pnp
 .pnp.*
@@ -10,32 +10,87 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# ==========================================
+# Next.js & Production Builds
+# ==========================================
 /.next/
 /out/
-
-# production
 /build
+/dist
+.turbo/
 
-# misc
-.DS_Store
+# ==========================================
+# TypeScript & Build Cache
+# ==========================================
+*.tsbuildinfo
+next-env.d.ts
+
+# ==========================================
+# Environment Variables & Secrets
+# ==========================================
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
 *.pem
 
-# debug
+# ==========================================
+# Logs & Debugging
+# ==========================================
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 .pnpm-debug.log*
+lerna-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# ==========================================
+# Testing & Coverage
+# ==========================================
+/coverage
+/.nyc_output
 
-# vercel
+# ==========================================
+# IDE & Code Editor Files
+# ==========================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# ==========================================
+# OS Generated Files
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Thumbs.db:encryptable
+desktop.ini
+
+# ==========================================
+# Cloud & Deployments
+# ==========================================
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# ==========================================
+# Local Temp & Cache Files
+# ==========================================
+.cache/
+*.tmp
+*.temp

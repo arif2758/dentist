@@ -194,39 +194,40 @@ export function LiveQueueMonitor() {
         </div>
       </div>
 
-      {/* Desktop Subheader (>= sm) */}
-      <div className="hidden sm:flex items-center justify-between pb-3 border-b border-[var(--antd-border-split)]">
-        <div>
+      {/* Desktop & Middle Devices Subheader (>= sm) */}
+      <div className="hidden sm:flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 pb-3 border-b border-[var(--antd-border-split)]">
+        <div className="min-w-0">
           <div className="flex items-center gap-2 text-xs text-[var(--antd-text-secondary)] mb-1">
             <Link
               href="/"
-              className="hover:text-[var(--antd-primary)] transition-colors inline-flex items-center gap-1"
+              className="hover:text-[var(--antd-primary)] transition-colors inline-flex items-center gap-1 shrink-0"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> হোম
             </Link>
             <span>/</span>
-            <span className="text-[var(--antd-text)] font-medium">
+            <span className="text-[var(--antd-text)] font-medium truncate">
               লাইভ ওপিডি সিরিয়াল
             </span>
           </div>
 
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-xl font-bold tracking-tight text-[var(--antd-text)]">
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+            <h1 className="text-lg sm:text-xl font-bold tracking-tight text-[var(--antd-text)] whitespace-nowrap">
               লাইভ ওপিডি সিরিয়াল মনিটর
             </h1>
-            <div className="inline-flex items-center gap-1.5 antd-tag antd-tag-blue py-0.5 px-2 text-[11px] font-semibold">
+            <div className="inline-flex items-center gap-1.5 antd-tag antd-tag-blue py-0.5 px-2 text-[11px] font-semibold whitespace-nowrap shrink-0">
               <span className={styles.livePulseDot} />
               <span>লাইভ সিঙ্ক {isFetching && "..."}</span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <div className="text-right hidden md:block">
-            <p className="text-xs font-semibold text-[var(--antd-text)]">
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Doctor Info (Shown on wide screens >= 1280px to prevent crowding on tablets/middle devices) */}
+          <div className="text-right hidden xl:block">
+            <p className="text-xs font-semibold text-[var(--antd-text)] whitespace-nowrap">
               ডা. মো. আসিফুল হক
             </p>
-            <p className="text-[11px] text-[var(--antd-text-secondary)]">
+            <p className="text-[11px] text-[var(--antd-text-secondary)] whitespace-nowrap">
               চেম্বার রুম #০১ • রাত ৯:৩০ পর্যন্ত
             </p>
           </div>
@@ -234,7 +235,7 @@ export function LiveQueueMonitor() {
           <button
             onClick={() => refetch()}
             title="রিফ্রেশ করুন"
-            className="antd-btn antd-btn-default h-8 px-2.5 text-xs flex items-center gap-1 font-medium"
+            className="antd-btn antd-btn-default h-8 px-2.5 text-xs flex items-center gap-1 font-medium whitespace-nowrap shrink-0"
           >
             <RefreshCw
               className={`w-3.5 h-3.5 ${isFetching ? "animate-spin text-[var(--antd-primary)]" : ""}`}
@@ -244,7 +245,7 @@ export function LiveQueueMonitor() {
 
           <Link
             href="/book"
-            className="antd-btn antd-btn-primary h-8 px-3 text-xs font-bold flex items-center gap-1.5 shadow-xs"
+            className="antd-btn antd-btn-primary h-8 px-3 text-xs font-bold flex items-center gap-1.5 shadow-xs whitespace-nowrap shrink-0"
           >
             <Calendar className="w-3.5 h-3.5" />
             <span>নতুন সিরিয়াল</span>

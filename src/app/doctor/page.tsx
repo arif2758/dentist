@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import {
@@ -21,11 +22,21 @@ import {
   BadgeCheck,
 } from "lucide-react";
 import { Tag, Button, Card, Row, Col, Typography, Space } from "antd";
+import { DoctorProfile } from "@/types";
 
 const { Title, Paragraph, Text } = Typography;
 
 export default function DoctorProfilePage() {
-  const scheduleDays = [
+  const { data } = useQuery<{ success: boolean; data: DoctorProfile }>({
+    queryKey: ["doctorProfile"],
+    queryFn: async () => {
+      const res = await fetch("/api/doctor");
+      return res.json();
+    },
+  });
+
+  const doctor = data?.data;
+  const scheduleDays = doctor?.schedule || [
     {
       day: "শনিবার",
       time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা",
@@ -87,14 +98,14 @@ export default function DoctorProfilePage() {
 
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-black text-[var(--antd-text)]">
-                    ডা. আসিফ চৌধুরী
+                    {doctor?.name || "ডা. মো. আসিফুল হক"}
                   </h1>
                   <p className="text-xs sm:text-sm font-semibold text-[var(--antd-primary)] mt-1">
-                    চিফ ডেন্টাল সার্জন ও এন্ডোডন্টিক বিশেষজ্ঞ
+                    {doctor?.title || "সিনিয়র ওরাল অ্যান্ড ম্যাক্সিলোফেসিয়াল সার্জন ও ডেন্টিস্ট"}
                   </p>
                   <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold">
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>BMDC Reg. No: A-84920</span>
+                    <span>BMDC Reg. No: {doctor?.bmdcRegNo || "A-54920"}</span>
                   </div>
                 </div>
 
@@ -103,19 +114,19 @@ export default function DoctorProfilePage() {
                     color="cyan"
                     className="px-2.5 py-0.5 font-semibold text-xs"
                   >
-                    ১০+ বছর অভিজ্ঞতা
+                    {doctor?.experienceYears || 30}+ বছর অভিজ্ঞতা
                   </Tag>
                   <Tag
                     color="blue"
                     className="px-2.5 py-0.5 font-semibold text-xs"
                   >
-                    ৫০০০+ সফল রুট ক্যানেল
+                    ২৫,০০০+ সফল রোগী
                   </Tag>
                   <Tag
                     color="purple"
                     className="px-2.5 py-0.5 font-semibold text-xs"
                   >
-                    লেজার ডেন্টিস্ট্রি সার্টিফাইড
+                    আন্তর্জাতিক সার্টিফাইড
                   </Tag>
                 </div>
               </div>
@@ -130,12 +141,8 @@ export default function DoctorProfilePage() {
                     আধুনিক ও ব্যথামুক্ত ডেন্টাল চিকিৎসার অঙ্গীকার
                   </h2>
                   <p className="text-xs sm:text-sm text-[var(--antd-text-secondary)] leading-relaxed">
-                    ডা. আসিফ চৌধুরী ঢাকা ডেন্টাল কলেজ থেকে বিডিএস সম্পন্ন করার
-                    পর উন্নত এন্ডোডন্টিক্স (রুট ক্যানেল), ডিজিটাল স্মাইল ডিজাইন
-                    ও ডেন্টাল ইমপ্ল্যান্টের উপর উচ্চতর প্রশিক্ষণ গ্রহণ করেছেন।
-                    তিনি বিগত এক দশকেরও বেশি সময় ধরে আধুনিক ও আন্তর্জাতিক মানের
-                    জীবাণুমুক্ত পরিবেশে ব্যথামুক্ত চিকিৎসা সেবা প্রদান করে
-                    আসছেন।
+                    {doctor?.bio ||
+                      "ডা. মো. আসিফুল হক বিগত ৩০ বছর ধরে সততা, দক্ষতা ও আধুনিক প্রযুক্তির সমন্বয়ে হাজার হাজার রোগীর সফল দন্তচিকিৎসা সেবা প্রদান করে আসছেন। আন্তর্জাতিক মানের ইউরোপিয়ান ক্লাস-বি অটোক্লেভ ও শতভাগ ব্যথামুক্ত অ্যানাস্থেসিয়া নিশ্চিত করাই ওনার চেম্বারের মূল লক্ষ্য।"}
                   </p>
                 </div>
 
@@ -147,12 +154,14 @@ export default function DoctorProfilePage() {
                       <span>শিক্ষাগত যোগ্যতা ও ডিগ্রি</span>
                     </div>
                     <ul className="text-xs text-[var(--antd-text-secondary)] space-y-1 list-disc list-inside">
-                      <li>BDS (Dhaka University)</li>
-                      <li>PGT (Endodontics & Conservative Dentistry)</li>
-                      <li>Advanced Training in Laser Dentistry (India)</li>
-                      <li>
-                        Fellow, International Congress of Oral Implantologists
-                      </li>
+                      {(doctor?.degrees || [
+                        "BDS (ঢাকা বিশ্ববিদ্যালয়, ডেন্টাল কলেজ)",
+                        "FCPS (ওরাল অ্যান্ড ম্যাক্সিলোফেসিয়াল সার্জারি)",
+                        "FICD (ইউএসএ) - ফেলো, ইন্টারন্যাশনাল কলেজ অফ ডেন্টিস্টস",
+                        "অ্যাডভান্সড ইমপ্ল্যান্টোলজি ট্রেনিং (জার্মানি ও থাইল্যান্ড)",
+                      ]).map((deg, degIdx) => (
+                        <li key={degIdx}>{deg}</li>
+                      ))}
                     </ul>
                   </div>
 
@@ -162,10 +171,15 @@ export default function DoctorProfilePage() {
                       <span>ক্লিনিক্যাল বিশেষত্ব (Specialties)</span>
                     </div>
                     <ul className="text-xs text-[var(--antd-text-secondary)] space-y-1 list-disc list-inside">
-                      <li>ব্যথামুক্ত সিঙ্গেল সিটিং রুট ক্যানেল (Rotary RCT)</li>
-                      <li>কসমেটিক স্মাইল মেকওভার ও ভেনিয়ার্স</li>
-                      <li>টাইটানিয়াম ডেন্টাল ইমপ্ল্যান্ট সার্জারি</li>
-                      <li>ইনভিজিবল ব্রেসেস ও বাচ্চাদের ডেন্টাল কেয়ার</li>
+                      {(doctor?.specialties || [
+                        "ব্যথামুক্ত রোটারি রুট ক্যানেল (Rotary RCT)",
+                        "টাইটানিয়াম ডেন্টাল ইমপ্ল্যান্ট সার্জারি",
+                        "কম্পোজিট কসমেটিক লেজার ফিলিং",
+                        "ইমপ্যাক্টেড আক্কেল দাঁতের ওটি (Wisdom Tooth Surgery)",
+                        "মাড়ির রোগ ও পিরিওডন্টাল চিকিৎসা",
+                      ]).map((spc, spcIdx) => (
+                        <li key={spcIdx}>{spc}</li>
+                      ))}
                     </ul>
                   </div>
                 </div>

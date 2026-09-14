@@ -16,13 +16,8 @@ import {
   Users 
 } from "lucide-react";
 import styles from "@/styles/styles.module.css";
-import { clinicStore } from "@/lib/store";
 
 export default function Home() {
-  const queue = clinicStore.getQueue();
-  const currentToken = queue.currentlyServingToken;
-  const waitingCount = queue.activeQueueList.filter((a) => a.status === "WAITING").length;
-
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />

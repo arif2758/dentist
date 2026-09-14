@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { Tag, Button, Space, Spin, Empty } from "antd";
+import { Tag, Button, Space, Spin, Empty, App } from "antd";
 import {
   ArrowLeftOutlined,
   PrinterOutlined,
@@ -18,14 +18,21 @@ import {
   ClockCircleOutlined,
   SafetyCertificateOutlined,
   FileTextOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { PatientRecord } from "@/lib/types";
 import { ToothChart, ToothCondition } from "@/components/dental/ToothChart";
+import { RecallScheduleModal } from "@/components/dental/RecallScheduleModal";
 
 export default function AdminPatientDetailPage() {
+  const { message } = App.useApp();
+  const queryClient = useQueryClient();
   const params = useParams();
   const router = useRouter();
   const patientId = params?.id as string;
+
+  const [isRecallModalOpen, setIsRecallModalOpen] = useState(false);
+  const [isSavingRecall, setIsSavingRecall] = useState(false);
 
   const { data, isLoading, error } = useQuery<{
     success: boolean;
@@ -42,6 +49,36 @@ export default function AdminPatientDetailPage() {
   });
 
   const patient = data?.data;
+
+  const handleSaveRecall = async (payload: {
+    patientId: string;
+    nextRecallDate: string;
+    note: string;
+    status: "SCHEDULED" | "OVERDUE" | "CONTACTED" | "PENDING";
+  }) => {
+    try {
+      setIsSavingRecall(true);
+      const res = await fetch("/api/patients", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (json.success) {
+        message.success("ফলো-আপ শিডিউল সফলভাবে আপডেট করা হয়েছে!");
+        queryClient.invalidateQueries({ queryKey: ["adminPatientDetail", patientId] });
+        queryClient.invalidateQueries({ queryKey: ["allPatients"] });
+        queryClient.invalidateQueries({ queryKey: ["overdueRecalls"] });
+        setIsRecallModalOpen(false);
+      } else {
+        message.error(json.message || "শিডিউল আপডেট ব্যর্থ হয়েছে");
+      }
+    } catch {
+      message.error("সার্ভার ত্রুটি");
+    } finally {
+      setIsSavingRecall(false);
+    }
+  };
 
   const handleSendWhatsApp = () => {
     if (!patient) return;
@@ -215,19 +252,35 @@ export default function AdminPatientDetailPage() {
           </div>
 
           {/* Recall Status Box */}
-          <div className="p-3 rounded-xl bg-[var(--antd-bg-layout)] border border-[var(--antd-border-split)] sm:text-right min-w-[200px] shrink-0">
+          <div className="p-3.5 rounded-xl bg-[var(--antd-bg-layout)] border border-[var(--antd-border-split)] sm:text-right min-w-[220px] shrink-0 space-y-1.5">
             <span className="text-[11px] text-[var(--antd-text-tertiary)] block">
-              পরবর্তী ৬ মাসের ফলো-আপ তারিখ
+              পরবর্তী ফলো-আপ / রিকল শিডিউল
             </span>
-            <span className="text-sm font-extrabold text-[var(--antd-text)] flex items-center sm:justify-end gap-1.5 mt-0.5">
+            <span className="text-sm font-extrabold text-[var(--antd-text)] flex items-center sm:justify-end gap-1.5">
               <CalendarOutlined
                 style={{ color: isOverdue ? "#ff4d4f" : "#1677ff" }}
               />
-              {patient.nextRecallDate}
+              {patient.nextRecallDate || "নির্ধারিত নেই"}
             </span>
-            <span className="text-[11px] text-[var(--antd-text-secondary)] block mt-0.5">
+            {patient.recallNotes && (
+              <span className="text-[11px] text-[var(--antd-text-secondary)] block truncate max-w-[210px]">
+                নোট: {patient.recallNotes}
+              </span>
+            )}
+            <span className="text-[11px] text-[var(--antd-text-tertiary)] block">
               সর্বশেষ চিকিৎসা: {patient.lastVisitDate}
             </span>
+            <div className="pt-1">
+              <Button
+                type="primary"
+                size="small"
+                icon={<EditOutlined />}
+                style={{ background: "#1677ff", fontSize: 11 }}
+                onClick={() => setIsRecallModalOpen(true)}
+              >
+                ফলো-আপ শিডিউল নির্ধারণ
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -416,6 +469,19 @@ export default function AdminPatientDetailPage() {
           </div>
         )}
       </div>
+
+      {patient && (
+        <RecallScheduleModal
+          open={isRecallModalOpen}
+          onClose={() => setIsRecallModalOpen(false)}
+          patientId={patient.id}
+          patientName={patient.patientName}
+          currentRecallDate={patient.nextRecallDate}
+          currentRecallNotes={patient.recallNotes}
+          onSave={handleSaveRecall}
+          loading={isSavingRecall}
+        />
+      )}
     </div>
   );
 }

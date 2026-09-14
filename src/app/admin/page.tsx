@@ -294,19 +294,19 @@ export default function AdminQueueDesk() {
             )}
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[var(--antd-border-split)]">
-              <div>
+              <div className="w-full sm:w-auto text-center flex flex-col items-center justify-center">
                 <span style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: 1, fontWeight: 700 }}>
                   বর্তমান টোকেন নম্বর
                 </span>
                 <div style={{ fontSize: 44, fontWeight: 900, color: "#1677ff", lineHeight: 1.1 }}>
                   #{currentToken}
                 </div>
-                <div style={{ marginTop: 6 }}>
-                  <Text strong style={{ fontSize: 15 }}>
+                <div style={{ marginTop: 6 }} className="text-center">
+                  <Text strong style={{ fontSize: 15 }} className="text-center block">
                     {servingPatient ? servingPatient.patientName : "কোনো রোগী ভেতরে নেই"}
                   </Text>
                   {servingPatient && (
-                    <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>
+                    <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }} className="text-center">
                       {servingPatient.serviceType} • {servingPatient.gender}, {servingPatient.age} বছর
                     </div>
                   )}
