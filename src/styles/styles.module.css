@@ -1,0 +1,83 @@
+/* ==========================================================================
+   Ant Design (antd) Clean Light & Dark Theme Design Tokens
+   ========================================================================== */
+
+.antdCard {
+  background-color: var(--antd-bg-container);
+  border: 1px solid var(--antd-border-split);
+  border-radius: var(--antd-radius-lg);
+  color: var(--antd-text);
+  box-shadow: var(--antd-shadow-sm);
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.antdCard:hover {
+  border-color: var(--antd-primary-border);
+  box-shadow: var(--antd-shadow);
+  transform: translateY(-2px);
+}
+
+.antdHeaderStrip {
+  background-color: var(--antd-bg-container);
+  border-bottom: 1px solid var(--antd-border-split);
+}
+
+.antdSectionAlt {
+  background-color: var(--antd-bg-layout);
+  border-top: 1px solid var(--antd-border-split);
+  border-bottom: 1px solid var(--antd-border-split);
+}
+
+.livePulseDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--antd-primary);
+  box-shadow: 0 0 0 0 rgba(22, 119, 255, 0.7);
+  animation: pulseAnimation 2s infinite;
+}
+
+@keyframes pulseAnimation {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(22, 119, 255, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 7px rgba(22, 119, 255, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(22, 119, 255, 0);
+  }
+}
+
+.tokenCardServing {
+  background-color: var(--antd-primary-bg);
+  border: 1.5px solid var(--antd-primary-border);
+  border-radius: var(--antd-radius-lg);
+}
+
+.scrollSpyActive {
+  color: var(--antd-primary) !important;
+  font-weight: 600;
+  position: relative;
+}
+
+.scrollSpyActive::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background-color: var(--antd-primary);
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+
+.heroBackgroundPattern {
+  background-image: radial-gradient(rgba(22, 119, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}

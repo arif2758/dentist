@@ -1,0 +1,912 @@
+/* ==========================================================================
+   Ant Design (antd) Inspired Component Utilities - Pure CSS & Tailwind
+   High Performance, Zero Runtime, 60fps Native Speed
+   ========================================================================== */
+
+:root {
+  /* Ant Design Color Tokens (Light Mode - Daybreak Blue) */
+  --antd-primary: #1677ff;
+  --antd-primary-hover: #4096ff;
+  --antd-primary-active: #0958d9;
+  --antd-primary-bg: #e6f4ff;
+  --antd-primary-border: #91caff;
+
+  --antd-success: #52c41a;
+  --antd-success-hover: #73d13d;
+  --antd-success-bg: #f6ffed;
+  --antd-success-border: #b7eb8f;
+
+  --antd-warning: #faad14;
+  --antd-warning-hover: #ffc53d;
+  --antd-warning-bg: #fffbe6;
+  --antd-warning-border: #ffe58f;
+
+  --antd-error: #ff4d4f;
+  --antd-error-hover: #ff7875;
+  --antd-error-bg: #fff2f0;
+  --antd-error-border: #ffccc7;
+
+  /* Neutral & Structure - Ant Design Default Light */
+  --antd-border: #d9d9d9;
+  --antd-border-split: #f0f0f0;
+  --antd-bg-container: #ffffff;
+  --antd-bg-layout: #f5f5f5;
+  --antd-bg-spotlight: rgba(0, 0, 0, 0.85);
+  --antd-text: rgba(0, 0, 0, 0.88);
+  --antd-text-secondary: rgba(0, 0, 0, 0.65);
+  --antd-text-tertiary: rgba(0, 0, 0, 0.45);
+  --antd-text-quaternary: rgba(0, 0, 0, 0.25);
+  --antd-radius: 6px;
+  --antd-radius-lg: 8px;
+  --antd-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+  --antd-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+
+  /* Tailwind / Base variable overrides to align with Ant Design Light Mode */
+  --background: #f5f5f5;
+  --foreground: rgba(0, 0, 0, 0.88);
+  --card: #ffffff;
+  --card-foreground: rgba(0, 0, 0, 0.88);
+  --popover: #ffffff;
+  --popover-foreground: rgba(0, 0, 0, 0.88);
+  --primary: #1677ff;
+  --primary-foreground: #ffffff;
+  --secondary: #f0f0f0;
+  --secondary-foreground: rgba(0, 0, 0, 0.88);
+  --muted: #f5f5f5;
+  --muted-foreground: rgba(0, 0, 0, 0.45);
+  --accent: #e6f4ff;
+  --accent-foreground: #1677ff;
+  --destructive: #ff4d4f;
+  --destructive-foreground: #ffffff;
+  --border: #d9d9d9;
+  --input: #d9d9d9;
+  --ring: #1677ff;
+}
+
+html.dark, .dark, [data-theme='dark'] {
+  /* Ant Design Color Tokens (Dark Mode) */
+  --antd-primary: #1668dc;
+  --antd-primary-hover: #3c89e8;
+  --antd-primary-active: #1554ad;
+  --antd-primary-bg: #111a2c;
+  --antd-primary-border: #15325b;
+
+  --antd-success: #49aa19;
+  --antd-success-hover: #6abe39;
+  --antd-success-bg: #162312;
+  --antd-success-border: #274916;
+
+  --antd-warning: #d89614;
+  --antd-warning-hover: #e8b339;
+  --antd-warning-bg: #2b2111;
+  --antd-warning-border: #594214;
+
+  --antd-error: #dc4446;
+  --antd-error-hover: #e86668;
+  --antd-error-bg: #2c1618;
+  --antd-error-border: #5b2123;
+
+  /* Neutral & Structure - Ant Design Default Dark */
+  --antd-border: #424242;
+  --antd-border-split: #303030;
+  --antd-bg-container: #1f1f1f;
+  --antd-bg-layout: #141414;
+  --antd-bg-spotlight: #2a2a2a;
+  --antd-text: rgba(255, 255, 255, 0.88);
+  --antd-text-secondary: rgba(255, 255, 255, 0.65);
+  --antd-text-tertiary: rgba(255, 255, 255, 0.45);
+  --antd-text-quaternary: rgba(255, 255, 255, 0.25);
+  --antd-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4), 0 1px 6px -1px rgba(0, 0, 0, 0.3);
+  --antd-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.4), 0 3px 6px -4px rgba(0, 0, 0, 0.48);
+
+  /* Tailwind / Base variable overrides to align with Ant Design Dark Mode */
+  --background: #141414;
+  --foreground: rgba(255, 255, 255, 0.88);
+  --card: #1f1f1f;
+  --card-foreground: rgba(255, 255, 255, 0.88);
+  --popover: #1f1f1f;
+  --popover-foreground: rgba(255, 255, 255, 0.88);
+  --primary: #1668dc;
+  --primary-foreground: #ffffff;
+  --secondary: #1f1f1f;
+  --secondary-foreground: rgba(255, 255, 255, 0.88);
+  --muted: #1f1f1f;
+  --muted-foreground: rgba(255, 255, 255, 0.45);
+  --accent: #111a2c;
+  --accent-foreground: #1668dc;
+  --destructive: #dc4446;
+  --destructive-foreground: #ffffff;
+  --border: #424242;
+  --input: #424242;
+  --ring: #1668dc;
+}
+
+body {
+  background-color: var(--antd-bg-layout) !important;
+  color: var(--antd-text) !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ==========================================================================
+   Ant Design Buttons (.antd-btn)
+   ========================================================================== */
+.antd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 32px;
+  padding: 4px 15px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5714285714285714;
+  border-radius: var(--antd-radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);
+}
+
+.antd-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+/* Primary Button */
+.antd-btn-primary {
+  color: #fff !important;
+  background-color: var(--antd-primary);
+  border-color: var(--antd-primary);
+  box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+}
+.antd-btn-primary:hover:not(:disabled) {
+  background-color: var(--antd-primary-hover);
+  border-color: var(--antd-primary-hover);
+}
+.antd-btn-primary:active:not(:disabled) {
+  background-color: var(--antd-primary-active);
+  border-color: var(--antd-primary-active);
+}
+
+/* Default / Secondary Button */
+.antd-btn-default {
+  color: var(--antd-text);
+  background-color: var(--antd-bg-container);
+  border-color: var(--antd-border);
+}
+.antd-btn-default:hover:not(:disabled) {
+  color: var(--antd-primary-hover);
+  border-color: var(--antd-primary-hover);
+}
+.antd-btn-default:active:not(:disabled) {
+  color: var(--antd-primary-active);
+  border-color: var(--antd-primary-active);
+}
+
+/* Dashed Button */
+.antd-btn-dashed {
+  color: var(--antd-text);
+  background-color: var(--antd-bg-container);
+  border: 1px dashed var(--antd-border);
+}
+.antd-btn-dashed:hover:not(:disabled) {
+  color: var(--antd-primary-hover);
+  border-color: var(--antd-primary-hover);
+}
+
+/* Danger Button */
+.antd-btn-danger {
+  color: #fff !important;
+  background-color: var(--antd-error);
+  border-color: var(--antd-error);
+}
+.antd-btn-danger:hover:not(:disabled) {
+  background-color: var(--antd-error-hover);
+  border-color: var(--antd-error-hover);
+}
+
+/* Text / Link Button */
+.antd-btn-text {
+  color: var(--antd-text);
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+.antd-btn-text:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.dark .antd-btn-text:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Button Sizes */
+.antd-btn-sm {
+  height: 24px;
+  padding: 0 7px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+.antd-btn-lg {
+  height: 40px;
+  padding: 6.4px 15px;
+  font-size: 16px;
+  border-radius: var(--antd-radius-lg);
+}
+
+/* ==========================================================================
+   Ant Design Cards (.antd-card)
+   ========================================================================== */
+.antd-card {
+  position: relative;
+  background-color: var(--antd-bg-container);
+  border-radius: var(--antd-radius-lg);
+  border: 1px solid var(--antd-border-split);
+  color: var(--antd-text);
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.antd-card-bordered {
+  border: 1px solid var(--antd-border-split);
+}
+
+.antd-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--antd-border-split);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.antd-card-body {
+  padding: 20px;
+}
+
+.antd-card-hoverable:hover {
+  border-color: transparent;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Ant Design Inputs (.antd-input)
+   ========================================================================== */
+.antd-input {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 4px 11px;
+  color: var(--antd-text);
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  background-color: var(--antd-bg-container);
+  border: 1px solid var(--antd-border);
+  border-radius: var(--antd-radius);
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  outline: none;
+  width: 100%;
+}
+
+.antd-input:hover {
+  border-color: var(--antd-primary-hover);
+}
+
+.antd-input:focus {
+  border-color: var(--antd-primary);
+  box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.15);
+}
+
+/* ==========================================================================
+   Ant Design Tags & Badges (.antd-tag)
+   ========================================================================== */
+.antd-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: auto;
+  margin-inline-end: 8px;
+  padding: 0 7px;
+  font-size: 12px;
+  line-height: 20px;
+  white-space: nowrap;
+  background: var(--antd-bg-layout);
+  border: 1px solid var(--antd-border);
+  border-radius: 4px;
+  color: var(--antd-text);
+  transition: all 0.2s;
+}
+
+.antd-tag-blue {
+  color: var(--antd-primary);
+  background: var(--antd-primary-bg);
+  border-color: var(--antd-primary-border);
+}
+
+.antd-tag-green {
+  color: var(--antd-success);
+  background: var(--antd-success-bg);
+  border-color: var(--antd-success-border);
+}
+
+.antd-tag-orange {
+  color: var(--antd-warning);
+  background: var(--antd-warning-bg);
+  border-color: var(--antd-warning-border);
+}
+
+.antd-tag-red {
+  color: var(--antd-error);
+  background: var(--antd-error-bg);
+  border-color: var(--antd-error-border);
+}
+
+/* ==========================================================================
+   Ant Design Table (.ant-table, .ant-pagination, .ant-select, etc.)
+   ========================================================================== */
+.ant-table-wrapper {
+  background-color: transparent !important;
+}
+
+.ant-table {
+  background-color: var(--antd-bg-container) !important;
+  color: var(--antd-text) !important;
+}
+
+.dark .ant-table-row-expand-icon {
+  background: #1f1f1f !important;
+  border-color: #383838 !important;
+  color: #cbd5e1 !important;
+}
+
+.dark .ant-table-column-sorter {
+  color: #64748b !important;
+}
+
+.dark .ant-table-column-sorter-up.active,
+.dark .ant-table-column-sorter-down.active {
+  color: #1677ff !important;
+}
+
+.dark .ant-empty-description {
+  color: #94a3b8 !important;
+}
+
+.ant-table-thead > tr > th {
+  background-color: #f8fafc !important;
+  color: #1e293b !important;
+  font-weight: 600 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  transition: background 0.2s;
+}
+
+.dark .ant-table-thead > tr > th {
+  background-color: #181818 !important;
+  color: #f8fafc !important;
+  border-bottom: 1px solid #282828 !important;
+}
+
+.ant-table-tbody > tr > td {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  transition: background 0.2s;
+}
+
+.dark .ant-table-tbody > tr > td {
+  background-color: #141414 !important;
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid #222222 !important;
+}
+
+.ant-table-tbody > tr:hover > td,
+.ant-table-tbody > tr.ant-table-row-hover > td {
+  background-color: #f8fafc !important;
+}
+
+.dark .ant-table-tbody > tr:hover > td,
+.dark .ant-table-tbody > tr.ant-table-row-hover > td {
+  background-color: #1c1c1c !important;
+}
+
+/* ==========================================================================
+   Ant Design Expanded Row Fix (Dark & Light Mode)
+   ========================================================================== */
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row,
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row > td,
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row > .ant-table-cell,
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row .ant-table-expanded-row-fixed {
+  background-color: #f8fafc !important;
+}
+
+html.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row,
+html.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row > td,
+html.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row > .ant-table-cell,
+html.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row .ant-table-expanded-row-fixed,
+.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row,
+.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row > td,
+.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row > .ant-table-cell,
+.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row .ant-table-expanded-row-fixed {
+  background-color: #141414 !important;
+  color: #f1f5f9 !important;
+  border-color: #262626 !important;
+}
+
+/* Ant Design Tabs Dark Mode */
+.dark .ant-tabs .ant-tabs-tab {
+  color: #94a3b8 !important;
+}
+.dark .ant-tabs .ant-tabs-tab:hover {
+  color: #1677ff !important;
+}
+.dark .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #1677ff !important;
+  font-weight: 600 !important;
+}
+.dark .ant-tabs .ant-tabs-ink-bar {
+  background: #1677ff !important;
+}
+.dark .ant-tabs-top > .ant-tabs-nav::before {
+  border-bottom-color: #262626 !important;
+}
+
+/* ==========================================================================
+   Ant Design <App> Global Link Reset (.ant-app a)
+   Fix: Neutralize Ant Design's global #1677ff link color; default to white in dark mode
+   Note: Excludes admin-nav-item and main-nav-item classes which have their own color definitions
+   ========================================================================== */
+.ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):link,
+.ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):visited {
+  color: inherit;
+}
+
+html.dark .ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item) {
+  color: #ffffff;
+}
+
+html.dark .ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):link,
+html.dark .ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):visited {
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   Ant Design Drawer Dark Mode
+   ========================================================================== */
+.dark .ant-drawer .ant-drawer-content,
+.dark .ant-drawer-content {
+  background-color: #141414 !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.dark .ant-drawer .ant-drawer-header,
+.dark .ant-drawer-header {
+  background-color: #1c1c1c !important;
+  border-bottom: 1px solid #2a2a2a !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.dark .ant-drawer .ant-drawer-title,
+.dark .ant-drawer-title {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.dark .ant-drawer .ant-drawer-close,
+.dark .ant-drawer-close {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.dark .ant-drawer .ant-drawer-close:hover,
+.dark .ant-drawer-close:hover {
+  color: rgba(255, 255, 255, 0.88) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .ant-drawer .ant-drawer-body,
+.dark .ant-drawer-body {
+  background-color: #141414 !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.dark .ant-drawer .ant-drawer-footer,
+.dark .ant-drawer-footer {
+  background-color: #141414 !important;
+  border-top: 1px solid #2a2a2a !important;
+}
+
+/* Drawer mask */
+.dark .ant-drawer .ant-drawer-mask {
+  background-color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* ==========================================================================
+   Admin Navbar Items (Clean, Consistent & Accessible)
+   Note: Uses html.dark (not .dark) so styles apply before React hydration
+   ========================================================================== */
+.admin-nav-item {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+/* Light mode active */
+.admin-nav-item.admin-nav-item-active {
+  background-color: rgba(239, 246, 255, 0.9) !important;
+  color: #2563eb !important;
+  font-weight: 600 !important;
+}
+
+.admin-nav-item.admin-nav-item-active:hover {
+  background-color: rgba(219, 234, 254, 0.95) !important;
+  color: #1d4ed8 !important;
+}
+
+/* Dark mode active — html.dark is set by next-themes synchronously */
+html.dark .admin-nav-item.admin-nav-item-active {
+  background-color: rgba(23, 37, 84, 0.6) !important;
+  color: #60a5fa !important;
+  font-weight: 600 !important;
+}
+
+html.dark .admin-nav-item.admin-nav-item-active:hover {
+  background-color: rgba(23, 37, 84, 0.8) !important;
+  color: #93c5fd !important;
+}
+
+
+.admin-site-btn {
+  text-decoration: none !important;
+}
+
+/* ==========================================================================
+   Main Website Navbar Items (Consistent across Links and Buttons)
+   Active State: Clean background + text color change only (NO underline)
+   ========================================================================== */
+.main-nav-item {
+  text-decoration: none !important;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Inactive Light Mode */
+.main-nav-item:not(.main-nav-item-active) {
+  color: #475569 !important; /* text-slate-600 */
+  background-color: transparent !important;
+}
+.main-nav-item:not(.main-nav-item-active):hover {
+  color: #2563eb !important; /* text-blue-600 */
+  background-color: rgba(241, 245, 249, 0.8) !important; /* bg-slate-100/80 */
+}
+
+/* Inactive Dark Mode */
+html.dark .main-nav-item:not(.main-nav-item-active) {
+  color: #cbd5e1 !important; /* text-slate-300 */
+  background-color: transparent !important;
+}
+html.dark .main-nav-item:not(.main-nav-item-active):hover {
+  color: #60a5fa !important; /* text-blue-400 */
+  background-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Active Light Mode: Soft Blue Pill + Blue-600 Text */
+.main-nav-item.main-nav-item-active {
+  background-color: #eff6ff !important; /* bg-blue-50 */
+  color: #2563eb !important; /* text-blue-600 */
+  font-weight: 600 !important;
+}
+.main-nav-item.main-nav-item-active svg {
+  color: #2563eb !important;
+}
+.main-nav-item.main-nav-item-active:hover {
+  background-color: #dbeafe !important; /* bg-blue-100 */
+  color: #1d4ed8 !important; /* text-blue-700 */
+}
+
+/* Active Dark Mode: Subtle Dark Blue Pill + Blue-400 Text */
+html.dark .main-nav-item.main-nav-item-active,
+.dark .main-nav-item.main-nav-item-active {
+  background-color: rgba(30, 58, 138, 0.45) !important; /* bg-blue-900/45 */
+  color: #60a5fa !important; /* text-blue-400 */
+  font-weight: 600 !important;
+}
+html.dark .main-nav-item.main-nav-item-active svg,
+.dark .main-nav-item.main-nav-item-active svg {
+  color: #60a5fa !important;
+}
+html.dark .main-nav-item.main-nav-item-active:hover,
+.dark .main-nav-item.main-nav-item-active:hover {
+  background-color: rgba(30, 58, 138, 0.65) !important;
+  color: #93c5fd !important; /* text-blue-300 */
+}
+
+/* ==========================================================================
+   Dashboard Subnavbar Items (Clean Pill Design, High Contrast & Clear Active State)
+   ========================================================================== */
+.dashboard-nav-item {
+  text-decoration: none !important;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Inactive Light Mode */
+.dashboard-nav-item:not(.dashboard-nav-item-active) {
+  color: #475569 !important; /* slate-600 */
+  background-color: transparent !important;
+}
+.dashboard-nav-item:not(.dashboard-nav-item-active):hover {
+  color: #0f172a !important; /* slate-900 */
+  background-color: rgba(241, 245, 249, 0.8) !important; /* slate-100 */
+}
+
+/* Inactive Dark Mode */
+html.dark .dashboard-nav-item:not(.dashboard-nav-item-active),
+.dark .dashboard-nav-item:not(.dashboard-nav-item-active) {
+  color: #94a3b8 !important; /* slate-400 */
+  background-color: transparent !important;
+}
+html.dark .dashboard-nav-item:not(.dashboard-nav-item-active):hover,
+.dark .dashboard-nav-item:not(.dashboard-nav-item-active):hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Active Light Mode: Vibrant Ant Design Primary Blue Pill (#1677ff) with Pure White Text & Crisp Shadow */
+.dashboard-nav-item.dashboard-nav-item-active {
+  background-color: #1677ff !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 6px -1px rgba(22, 119, 255, 0.35) !important;
+}
+.dashboard-nav-item.dashboard-nav-item-active svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+.dashboard-nav-item.dashboard-nav-item-active:hover {
+  background-color: #4096ff !important;
+  color: #ffffff !important;
+}
+
+/* Active Dark Mode: Vibrant Ant Design Dark Mode Primary Blue (#1668dc) with Pure White Text */
+html.dark .dashboard-nav-item.dashboard-nav-item-active,
+.dark .dashboard-nav-item.dashboard-nav-item-active {
+  background-color: #1668dc !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px -1px rgba(22, 104, 220, 0.5) !important;
+}
+html.dark .dashboard-nav-item.dashboard-nav-item-active svg,
+.dark .dashboard-nav-item.dashboard-nav-item-active svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+html.dark .dashboard-nav-item.dashboard-nav-item-active:hover,
+.dark .dashboard-nav-item.dashboard-nav-item-active:hover {
+  background-color: #1554ad !important;
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   Admin Family Tree Toolbar Controls (Search Input, Selects, CSV Export)
+   ========================================================================== */
+.admin-toolbar-input,
+.admin-toolbar-select,
+.admin-toolbar-btn {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+.dark .admin-toolbar-input,
+.dark .admin-toolbar-select,
+.dark .admin-toolbar-btn {
+  background-color: #1c1c1c !important;
+  border-color: #303030 !important;
+  color: #f1f5f9 !important;
+}
+.dark .admin-toolbar-select option {
+  background-color: #1c1c1c !important;
+  color: #f1f5f9 !important;
+}
+.dark .admin-toolbar-input::placeholder {
+  color: #64748b !important;
+}
+.admin-toolbar-btn:hover {
+  background-color: #f1f5f9 !important;
+}
+.dark .admin-toolbar-btn:hover {
+  background-color: #252525 !important;
+}
+
+/* ==========================================================================
+   Ant Design Double Layer Nested Table Inner Elements (Issue 1 & 2 Fix)
+   ========================================================================== */
+.admin-nested-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+}
+.dark .admin-nested-card {
+  background-color: #1c1c1c !important;
+  border: 1px solid #303030 !important;
+  color: #f1f5f9 !important;
+}
+
+.admin-nested-card-empty {
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  color: #64748b;
+}
+.dark .admin-nested-card-empty {
+  background-color: #181818 !important;
+  border: 1px dashed #303030 !important;
+  color: #94a3b8 !important;
+}
+
+.admin-nested-title {
+  color: #0f172a;
+}
+.dark .admin-nested-title {
+  color: #ffffff !important;
+}
+
+.admin-nested-desc {
+  color: #64748b;
+}
+.dark .admin-nested-desc {
+  color: #94a3b8 !important;
+}
+
+/* Ant Design Pagination */
+.dark .ant-pagination .ant-pagination-item {
+  background-color: #1a1a1a !important;
+  border-color: #2e2e2e !important;
+}
+.dark .ant-pagination .ant-pagination-item a {
+  color: #cbd5e1 !important;
+}
+.dark .ant-pagination .ant-pagination-item-active {
+  background-color: #1677ff !important;
+  border-color: #1677ff !important;
+}
+.dark .ant-pagination .ant-pagination-item-active a {
+  color: #ffffff !important;
+}
+.dark .ant-pagination .ant-pagination-prev .ant-pagination-item-link,
+.dark .ant-pagination .ant-pagination-next .ant-pagination-item-link {
+  background-color: #1a1a1a !important;
+  border-color: #2e2e2e !important;
+  color: #cbd5e1 !important;
+}
+.dark .ant-pagination-total-text {
+  color: #94a3b8 !important;
+}
+
+/* Ant Design Select & Inputs in Dark Mode */
+.dark .ant-select-dropdown {
+  background-color: #1c1c1c !important;
+  border: 1px solid #303030 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+.dark .ant-select-item {
+  color: #cbd5e1 !important;
+}
+.dark .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #242424 !important;
+  color: #1677ff !important;
+}
+.dark .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: #282828 !important;
+}
+
+/* ==========================================================================
+   Ant Design Alert (.antd-alert)
+   ========================================================================== */
+.antd-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 15px;
+  font-size: 14px;
+  border-radius: var(--antd-radius);
+  border: 1px solid transparent;
+}
+.antd-alert-info {
+  background-color: var(--antd-primary-bg);
+  border-color: var(--antd-primary-border);
+  color: var(--antd-text);
+}
+.antd-alert-success {
+  background-color: var(--antd-success-bg);
+  border-color: var(--antd-success-border);
+  color: var(--antd-text);
+}
+.antd-alert-warning {
+  background-color: var(--antd-warning-bg);
+  border-color: var(--antd-warning-border);
+  color: var(--antd-text);
+}
+.antd-alert-error {
+  background-color: var(--antd-error-bg);
+  border-color: var(--antd-error-border);
+  color: var(--antd-text);
+}
+
+/* ==========================================================================
+   Admin User Table Custom Dropdowns (Clean, Minimal & High Contrast)
+   ========================================================================== */
+.admin-role-dropdown,
+.admin-account-type-dropdown,
+.admin-status-dropdown {
+  min-width: 175px !important;
+  border-radius: 12px !important;
+  padding: 6px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+}
+
+.admin-role-dropdown .ant-select-item,
+.admin-account-type-dropdown .ant-select-item,
+.admin-status-dropdown .ant-select-item {
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  color: #1e293b !important;
+  background-color: transparent !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  transition: all 0.15s ease !important;
+}
+
+.admin-role-dropdown .ant-select-item-option-active,
+.admin-account-type-dropdown .ant-select-item-option-active,
+.admin-status-dropdown .ant-select-item-option-active {
+  background-color: #f1f5f9 !important;
+}
+
+.admin-role-dropdown .ant-select-item-option-selected,
+.admin-account-type-dropdown .ant-select-item-option-selected,
+.admin-status-dropdown .ant-select-item-option-selected {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+  font-weight: 600 !important;
+}
+
+/* Dark Mode Overrides */
+.dark .admin-role-dropdown,
+.dark .admin-account-type-dropdown,
+.dark .admin-status-dropdown {
+  background-color: #18181b !important;
+  border: 1px solid #2e2e32 !important;
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.75) !important;
+}
+
+.dark .admin-role-dropdown .ant-select-item,
+.dark .admin-account-type-dropdown .ant-select-item,
+.dark .admin-status-dropdown .ant-select-item {
+  color: #f4f4f5 !important;
+}
+
+.dark .admin-role-dropdown .ant-select-item-option-active,
+.dark .admin-account-type-dropdown .ant-select-item-option-active,
+.dark .admin-status-dropdown .ant-select-item-option-active {
+  background-color: #27272a !important;
+}
+
+.dark .admin-role-dropdown .ant-select-item-option-selected,
+.dark .admin-account-type-dropdown .ant-select-item-option-selected,
+.dark .admin-status-dropdown .ant-select-item-option-selected {
+  background-color: #1e293b !important;
+  color: #60a5fa !important;
+}
+
+
+
+
+
+
