@@ -56,6 +56,10 @@ async function seedInitialUsersIfEmpty() {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret:
+    process.env.AUTH_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    "dental_clinic_super_secret_auth_key_2026_jwt_token_authjs_v5",
   trustHost: true,
   session: { strategy: "jwt" },
   pages: {
