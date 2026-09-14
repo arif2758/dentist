@@ -127,7 +127,41 @@ export default function WaitingRoomDisplay() {
       </header>
 
       {/* Main Massive Token Calling Screen */}
-      <main className="my-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-6">
+      <main className="my-auto py-6">
+        {/* Break Announcement Banner on TV Display */}
+        {queue?.breakInfo?.isOnBreak && (
+          <div className="w-full mb-6 p-6 rounded-3xl bg-gradient-to-r from-amber-950/90 via-amber-900/70 to-amber-950/90 border-2 border-amber-500 flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xl shadow-amber-500/20">
+            <div className="flex items-center gap-4">
+              <span className="text-5xl">☕</span>
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="px-3 py-1 rounded-full bg-amber-500 text-slate-950 text-xs font-black uppercase tracking-wider">
+                    চেম্বার সাময়িক বিরতি
+                  </span>
+                  <span className="text-xl sm:text-2xl font-black text-amber-300">
+                    {queue.breakInfo.reasonText || "ডাক্তার সাহেব সাময়িক বিরতিতে আছেন"}
+                  </span>
+                </div>
+                <p className="text-sm text-slate-300 mt-1">
+                  রোগীদের অবগতির জন্য জানানো যাচ্ছে যে সাময়িক বিরতি চলছে। নির্ধারিত সময়ে পরবর্তী সিরিয়াল ডাকা হবে।
+                </p>
+              </div>
+            </div>
+            <div className="text-center md:text-right border-t md:border-t-0 md:border-l border-amber-500/40 pt-3 md:pt-0 md:pl-6 shrink-0">
+              <span className="text-xs uppercase font-bold text-amber-400 block tracking-wider">
+                পুনরায় শুরু হওয়ার সম্ভাব্য সময়
+              </span>
+              <span className="text-3xl font-black text-white block mt-0.5">
+                {queue.breakInfo.expectedResumeTime || "শীঘ্রই"}
+              </span>
+              <span className="text-xs text-amber-200">
+                (স্থায়িত্ব: ~{queue.breakInfo.durationMinutes} মিনিট)
+              </span>
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* Left 7 cols: Big Serving Token */}
         <div className="lg:col-span-7 bg-slate-900 rounded-3xl border-2 border-blue-600 p-8 sm:p-12 text-center shadow-2xl shadow-blue-500/10 space-y-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold bg-blue-500/20 text-sky-300 border border-blue-500/40">
@@ -202,6 +236,7 @@ export default function WaitingRoomDisplay() {
               করা হচ্ছে।
             </span>
           </div>
+        </div>
         </div>
       </main>
 

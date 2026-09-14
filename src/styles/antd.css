@@ -127,6 +127,15 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+.ant-app {
+  color: var(--antd-text) !important;
+  background-color: transparent !important;
+}
+
+a {
+  text-decoration: none;
+}
+
 /* ==========================================================================
    Ant Design Buttons (.antd-btn)
    ========================================================================== */
@@ -173,27 +182,32 @@ body {
 }
 
 /* Default / Secondary Button */
-.antd-btn-default {
+.antd-btn-default,
+a.antd-btn-default {
   color: var(--antd-text);
   background-color: var(--antd-bg-container);
   border-color: var(--antd-border);
 }
-.antd-btn-default:hover:not(:disabled) {
+.antd-btn-default:hover:not(:disabled),
+a.antd-btn-default:hover:not(:disabled) {
   color: var(--antd-primary-hover);
   border-color: var(--antd-primary-hover);
 }
-.antd-btn-default:active:not(:disabled) {
+.antd-btn-default:active:not(:disabled),
+a.antd-btn-default:active:not(:disabled) {
   color: var(--antd-primary-active);
   border-color: var(--antd-primary-active);
 }
 
 /* Dashed Button */
-.antd-btn-dashed {
+.antd-btn-dashed,
+a.antd-btn-dashed {
   color: var(--antd-text);
   background-color: var(--antd-bg-container);
   border: 1px dashed var(--antd-border);
 }
-.antd-btn-dashed:hover:not(:disabled) {
+.antd-btn-dashed:hover:not(:disabled),
+a.antd-btn-dashed:hover:not(:disabled) {
   color: var(--antd-primary-hover);
   border-color: var(--antd-primary-hover);
 }
@@ -459,22 +473,22 @@ html.dark .ant-table-wrapper .ant-table-tbody > tr.ant-table-expanded-row .ant-t
    Fix: Neutralize Ant Design's global #1677ff link color; default to white in dark mode
    Note: Excludes admin-nav-item and main-nav-item classes which have their own color definitions
    ========================================================================== */
-.ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item) {
+.ant-app a:not([class*="text-"]):not([class*="antd-btn"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item) {
   color: inherit;
   text-decoration: none;
 }
 
-.ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):link,
-.ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):visited {
+.ant-app a:not([class*="text-"]):not([class*="antd-btn"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):link,
+.ant-app a:not([class*="text-"]):not([class*="antd-btn"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):visited {
   color: inherit;
 }
 
-html.dark .ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item) {
+html.dark .ant-app a:not([class*="text-"]):not([class*="antd-btn"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item) {
   color: #ffffff;
 }
 
-html.dark .ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):link,
-html.dark .ant-app a:not([class*="text-"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):visited {
+html.dark .ant-app a:not([class*="text-"]):not([class*="antd-btn"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):link,
+html.dark .ant-app a:not([class*="text-"]):not([class*="antd-btn"]):not(.admin-nav-item):not(.main-nav-item):not(.dashboard-nav-item):visited {
   color: #ffffff;
 }
 

@@ -46,8 +46,8 @@ export function Navbar() {
                 href={link.href}
                 className={`px-3 py-1 rounded-[var(--antd-radius)] text-xs lg:text-sm font-medium transition-all duration-150 flex items-center gap-1.5 ${
                   isActive
-                    ? "bg-[var(--antd-primary-bg)] text-[var(--antd-primary)] font-semibold"
-                    : "text-[var(--antd-text-secondary)] hover:text-[var(--antd-text)] hover:bg-[var(--antd-bg-layout)]"
+                    ? "!bg-[var(--antd-primary-bg)] !text-[var(--antd-primary)] font-semibold"
+                    : "!text-[var(--antd-text-secondary)] hover:!text-[var(--antd-text)] hover:bg-[var(--antd-bg-layout)]"
                 }`}
               >
                 <span>{link.label}</span>
@@ -64,7 +64,7 @@ export function Navbar() {
           {/* Quick Doctor Login Link */}
           <Link
             href="/admin"
-            className="hidden sm:inline-flex items-center gap-1 text-[11px] text-[var(--antd-text-tertiary)] hover:text-[var(--antd-primary)] px-2 py-1 transition-colors"
+            className="hidden sm:inline-flex items-center gap-1 text-[11px] !text-[var(--antd-text-tertiary)] hover:!text-[var(--antd-primary)] px-2 py-1 transition-colors"
           >
             <UserCheck className="w-3.5 h-3.5" />
             <span>ডক্টরস ওপিডি</span>
@@ -102,8 +102,8 @@ export function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className={`w-full px-3 py-2 rounded-[var(--antd-radius)] text-xs font-medium flex items-center justify-between ${
                   isActive
-                    ? "bg-[var(--antd-primary-bg)] text-[var(--antd-primary)] font-semibold"
-                    : "text-[var(--antd-text)] hover:bg-[var(--antd-bg-layout)]"
+                    ? "!bg-[var(--antd-primary-bg)] !text-[var(--antd-primary)] font-semibold"
+                    : "!text-[var(--antd-text-secondary)] hover:!text-[var(--antd-text)] hover:bg-[var(--antd-bg-layout)]"
                 }`}
               >
                 <span>{link.label}</span>

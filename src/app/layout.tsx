@@ -4,7 +4,6 @@ import "@/styles/globals.css";
 import "@/styles/antd.css";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
-import { MobileTabBar } from "@/components/layout/MobileTabBar";
 
 const notoSansBengali = Noto_Sans_Bengali({
   subsets: ["bengali"],
@@ -41,9 +40,8 @@ export default function RootLayout({
     >
       <body className={`${notoSansBengali.className} min-h-full flex flex-col bg-[var(--antd-bg-layout)] text-[var(--antd-text)] transition-colors duration-200`}>
         <Providers>
-          <div className="w-full min-h-screen flex flex-col relative pb-16 md:pb-0">
+          <div className="w-full min-h-screen flex flex-col relative">
             {children}
-            <MobileTabBar />
             <Toaster position="top-right" richColors />
           </div>
         </Providers>

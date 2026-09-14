@@ -61,6 +61,17 @@ export interface PatientRecord {
   createdAt?: string;
 }
 
+export type BreakReason = 'PRAYER' | 'TEA' | 'MEAL' | 'COMPLEX_SURGERY' | 'EMERGENCY' | 'OTHER';
+
+export interface BreakInfo {
+  isOnBreak: boolean;
+  reason: BreakReason;
+  reasonText: string;
+  startedAt?: string;
+  expectedResumeTime?: string; // e.g. "07:15 PM"
+  durationMinutes?: number;
+}
+
 export interface QueueState {
   isDoctorInChamber: boolean;
   chamberName: string;
@@ -69,6 +80,7 @@ export interface QueueState {
   totalTokensToday: number;
   avgMinutesPerPatient: number;
   activeQueueList: Appointment[];
+  breakInfo?: BreakInfo;
   lastUpdated: string;
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Tag, Badge, Tooltip, Button, Space, Modal, Select, message } from "antd";
+import { Tag, Badge, Tooltip, Button, Space, Modal, Select, App } from "antd";
 import {
   CheckCircleOutlined,
   ExclamationCircleOutlined,
@@ -133,6 +133,7 @@ export function ToothChart({
   readOnly = false,
   onToothUpdate,
 }: ToothChartProps) {
+  const { message } = App.useApp();
   const [conditions, setConditions] = useState<
     Record<number, { condition: ToothCondition; note?: string }>
   >(initialConditions);

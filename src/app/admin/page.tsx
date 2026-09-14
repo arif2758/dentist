@@ -12,11 +12,14 @@ import {
   Row,
   Col,
   Statistic,
-  message,
-  Switch,
+  App,
   Typography,
   Popconfirm,
   Badge,
+  Modal,
+  Radio,
+  InputNumber,
+  Input,
 } from "antd";
 import {
   SoundOutlined,
@@ -26,14 +29,24 @@ import {
   UserOutlined,
   CloseCircleOutlined,
   SyncOutlined,
+  CoffeeOutlined,
+  PauseCircleOutlined,
+  PlayCircleOutlined,
 } from "@ant-design/icons";
 import { Appointment, QueueState } from "@/lib/types";
 
 const { Title, Text } = Typography;
 
 export default function AdminQueueDesk() {
+  const { message } = App.useApp();
   const queryClient = useQueryClient();
   const [callingSound, setCallingSound] = useState(false);
+
+  // Break State Modal
+  const [breakModalOpen, setBreakModalOpen] = useState(false);
+  const [breakReason, setBreakReason] = useState<string>("PRAYER");
+  const [breakDuration, setBreakDuration] = useState<number>(15);
+  const [breakCustomNote, setBreakCustomNote] = useState<string>("");
 
   // TanStack Query for real-time queue
   const { data, isLoading } = useQuery<{ success: boolean; data: QueueState }>({
@@ -50,10 +63,19 @@ export default function AdminQueueDesk() {
   const activeList = queue?.activeQueueList ?? [];
   const servingPatient = activeList.find((a) => a.tokenNumber === currentToken && a.status === "SERVING");
   const waitingPatients = activeList.filter((a) => a.status === "WAITING");
+  const isOnBreak = queue?.breakInfo?.isOnBreak ?? false;
 
   // Mutation to update queue actions
   const queueMutation = useMutation({
-    mutationFn: async (payload: { action: string; tokenNumber?: number; inChamber?: boolean }) => {
+    mutationFn: async (payload: {
+      action: string;
+      tokenNumber?: number;
+      inChamber?: boolean;
+      isOnBreak?: boolean;
+      reason?: string;
+      durationMinutes?: number;
+      customText?: string;
+    }) => {
       const res = await fetch("/api/queue", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -61,7 +83,7 @@ export default function AdminQueueDesk() {
       });
       return res.json();
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["adminQueue"] });
       queryClient.invalidateQueries({ queryKey: ["liveQueue"] });
       queryClient.invalidateQueries({ queryKey: ["queueStatus"] });
@@ -84,8 +106,22 @@ export default function AdminQueueDesk() {
     queueMutation.mutate({ action: "recall", tokenNumber: tokenNum });
   };
 
-  const handleToggleChamber = (checked: boolean) => {
-    queueMutation.mutate({ action: "setDoctorStatus", inChamber: checked });
+  const handleStartBreak = () => {
+    queueMutation.mutate({
+      action: "setBreak",
+      isOnBreak: true,
+      reason: breakReason,
+      durationMinutes: breakDuration,
+      customText: breakCustomNote,
+    });
+    setBreakModalOpen(false);
+  };
+
+  const handleEndBreak = () => {
+    queueMutation.mutate({
+      action: "setBreak",
+      isOnBreak: false,
+    });
   };
 
   const columns = [
@@ -203,21 +239,60 @@ export default function AdminQueueDesk() {
             }
             extra={
               <Space size="small">
-                <span className="hidden sm:inline" style={{ fontSize: 12, color: "#64748b" }}>ডাক্তার চেম্বারে:</span>
-                <Switch
-                  checked={queue?.isDoctorInChamber ?? true}
-                  onChange={handleToggleChamber}
-                  checkedChildren="উপস্থিত"
-                  unCheckedChildren="বিরতি"
-                  size="small"
-                />
+                {isOnBreak ? (
+                  <Button
+                    type="primary"
+                    danger
+                    size="small"
+                    icon={<PlayCircleOutlined />}
+                    onClick={handleEndBreak}
+                    loading={queueMutation.isPending}
+                    className="font-bold text-xs"
+                  >
+                    বিরতি শেষ করুন (Resume)
+                  </Button>
+                ) : (
+                  <Button
+                    size="small"
+                    icon={<CoffeeOutlined />}
+                    onClick={() => setBreakModalOpen(true)}
+                    className="font-semibold text-xs border-amber-500 text-amber-600 hover:bg-amber-50"
+                  >
+                    বিরতি নিন
+                  </Button>
+                )}
               </Space>
             }
             style={{
-              borderColor: "#1677ff",
-              boxShadow: "0 2px 10px rgba(22,119,255,0.08)",
+              borderColor: isOnBreak ? "#f59e0b" : "#1677ff",
+              boxShadow: isOnBreak ? "0 2px 12px rgba(245, 158, 11, 0.15)" : "0 2px 10px rgba(22,119,255,0.08)",
             }}
           >
+            {/* Active Break Alert Notice */}
+            {isOnBreak && (
+              <div className="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 text-xs font-bold">
+                  <CoffeeOutlined className="text-base text-amber-600" />
+                  <span>
+                    চেম্বার সাময়িক বিরতিতে আছে: <u>{queue?.breakInfo?.reasonText || "বিরতি"}</u>
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-amber-700 dark:text-amber-400">
+                    পুনরায় শুরু: <strong>{queue?.breakInfo?.expectedResumeTime || "শীঘ্রই"}</strong> ({queue?.breakInfo?.durationMinutes} মিনিট)
+                  </span>
+                  <Button
+                    size="small"
+                    type="primary"
+                    onClick={handleEndBreak}
+                    className="text-[11px] h-6 font-bold bg-amber-600 hover:bg-amber-700 border-none"
+                  >
+                    এখনই শেষ করুন
+                  </Button>
+                </div>
+              </div>
+            )}
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[var(--antd-border-split)]">
               <div>
                 <span style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: 1, fontWeight: 700 }}>
@@ -481,6 +556,101 @@ export default function AdminQueueDesk() {
           />
         </Card>
       </div>
+
+      {/* Break Configuration Modal */}
+      <Modal
+        title={
+          <div className="flex items-center gap-2">
+            <CoffeeOutlined className="text-amber-500 text-lg" />
+            <span className="font-bold text-base text-[var(--antd-text)]">
+              চেম্বার সাময়িক বিরতি নির্ধারণ (Chamber Break)
+            </span>
+          </div>
+        }
+        open={breakModalOpen}
+        onCancel={() => setBreakModalOpen(false)}
+        onOk={handleStartBreak}
+        okText="বিরতি শুরু করুন"
+        cancelText="বাতিল"
+        confirmLoading={queueMutation.isPending}
+        centered
+      >
+        <div className="py-3 space-y-4">
+          <p className="text-xs text-[var(--antd-text-secondary)]">
+            বিরতি চালু করলে ওয়েটিং রুমের টিভি ডিসপ্লে ও রোগীদের লাইভ কিউ পেজে বিরতির কারণ ও অপেক্ষার নতুন সময় প্রদর্শিত হবে।
+          </p>
+
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-[var(--antd-text)] block">
+              বিরতির কারণ নির্বাচন করুন:
+            </label>
+            <Radio.Group
+              value={breakReason}
+              onChange={(e) => {
+                const val = e.target.value;
+                setBreakReason(val);
+                if (val === "PRAYER") setBreakDuration(15);
+                else if (val === "TEA") setBreakDuration(10);
+                else if (val === "MEAL") setBreakDuration(25);
+                else if (val === "COMPLEX_SURGERY") setBreakDuration(30);
+              }}
+              className="w-full flex flex-col gap-2"
+            >
+              <Radio value="PRAYER" className="text-xs">
+                🕌 <strong>নামাজের বিরতি</strong> (১৫ মিনিট)
+              </Radio>
+              <Radio value="TEA" className="text-xs">
+                ☕ <strong>চা ও হালকা নাস্তার বিরতি</strong> (১০ মিনিট)
+              </Radio>
+              <Radio value="MEAL" className="text-xs">
+                🍽️ <strong>খাবার / ডিনারের বিরতি</strong> (২৫ মিনিট)
+              </Radio>
+              <Radio value="COMPLEX_SURGERY" className="text-xs">
+                ⚡ <strong>জটিল অস্ত্রোপচার / ওটি চলছে</strong> (৩০ মিনিট)
+              </Radio>
+              <Radio value="OTHER" className="text-xs">
+                ✍️ <strong>অন্যান্য / কাস্টম কারণ</strong>
+              </Radio>
+            </Radio.Group>
+          </div>
+
+          {breakReason === "OTHER" && (
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-[var(--antd-text)] block">
+                বিরতির কাস্টম বিবরণ (বাংলায় লিখুন):
+              </label>
+              <Input
+                placeholder="যেমন: ইমার্জেন্সি কনসালটেশন / ১০ মিনিট বিরতি"
+                value={breakCustomNote}
+                onChange={(e) => setBreakCustomNote(e.target.value)}
+                className="text-xs"
+              />
+            </div>
+          )}
+
+          <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--antd-bg-layout)] border border-[var(--antd-border-split)]">
+            <div>
+              <span className="text-xs font-bold text-[var(--antd-text)] block">
+                বিরতির আনুমানিক স্থায়িত্ব:
+              </span>
+              <span className="text-[11px] text-[var(--antd-text-secondary)]">
+                রোগীদের নতুন ওয়েটিং টাইম এর সাথে সমন্বয় হবে
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <InputNumber
+                min={5}
+                max={90}
+                value={breakDuration}
+                onChange={(val) => setBreakDuration(val || 15)}
+                size="middle"
+                className="w-20 text-xs font-bold"
+              />
+              <span className="text-xs font-semibold text-[var(--antd-text-secondary)]">মিনিট</span>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

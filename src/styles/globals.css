@@ -127,4 +127,8 @@
   html {
     @apply font-sans;
   }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }

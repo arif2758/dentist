@@ -1,4 +1,4 @@
-import { Appointment, PatientRecord, QueueState } from "./types";
+import { Appointment, PatientRecord, QueueState, BreakReason } from "./types";
 
 // Realistic Seed Data
 const initialAppointments: Appointment[] = [
@@ -249,6 +249,14 @@ if (!globalStore.__DENTIST_QUEUE__) {
     totalTokensToday: 8,
     avgMinutesPerPatient: 18,
     activeQueueList: initialAppointments,
+    breakInfo: {
+      isOnBreak: false,
+      reason: "TEA",
+      reasonText: "",
+      durationMinutes: 15,
+      startedAt: "",
+      expectedResumeTime: "",
+    },
     lastUpdated: new Date().toISOString(),
   };
 }
@@ -322,6 +330,50 @@ export const clinicStore = {
   setDoctorStatus(inChamber: boolean): QueueState {
     const queue = globalStore.__DENTIST_QUEUE__!;
     queue.isDoctorInChamber = inChamber;
+    if (inChamber && queue.breakInfo?.isOnBreak) {
+      queue.breakInfo.isOnBreak = false;
+    }
+    queue.lastUpdated = new Date().toISOString();
+    return { ...queue };
+  },
+
+  setBreak(
+    isOnBreak: boolean,
+    reason: BreakReason = "TEA",
+    durationMinutes: number = 15,
+    customText?: string
+  ): QueueState {
+    const queue = globalStore.__DENTIST_QUEUE__!;
+    const now = new Date();
+    const resumeDate = new Date(now.getTime() + durationMinutes * 60 * 1000);
+
+    const formatTime = (d: Date) => {
+      let hours = d.getHours();
+      const mins = d.getMinutes().toString().padStart(2, "0");
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12 || 12;
+      return `${hours.toString().padStart(2, "0")}:${mins} ${ampm}`;
+    };
+
+    const reasonMap: Record<BreakReason, string> = {
+      PRAYER: "নামাজের বিরতি",
+      TEA: "চা ও হালকা নাস্তার বিরতি",
+      MEAL: "খাবার / ডিনারের বিরতি",
+      COMPLEX_SURGERY: "জরুরি জটিল চিকিৎসা / ওটি চলছে",
+      EMERGENCY: "জরুরি কেস পরিচালনা",
+      OTHER: customText || "সাময়িক বিরতি",
+    };
+
+    queue.breakInfo = {
+      isOnBreak,
+      reason,
+      reasonText: customText || reasonMap[reason] || "সাময়িক বিরতি",
+      durationMinutes,
+      startedAt: isOnBreak ? formatTime(now) : "",
+      expectedResumeTime: isOnBreak ? formatTime(resumeDate) : "",
+    };
+
+    queue.isDoctorInChamber = !isOnBreak;
     queue.lastUpdated = new Date().toISOString();
     return { ...queue };
   },

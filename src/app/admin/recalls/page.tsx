@@ -9,7 +9,7 @@ import {
   Button,
   Space,
   Typography,
-  message,
+  App,
   Modal,
   Input,
   Alert,
@@ -29,6 +29,7 @@ const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
 export default function AdminRecallCenter() {
+  const { message } = App.useApp();
   const queryClient = useQueryClient();
   const [selectedPatient, setSelectedPatient] = useState<PatientRecord | null>(
     null,

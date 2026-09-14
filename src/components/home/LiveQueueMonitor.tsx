@@ -112,15 +112,18 @@ export function LiveQueueMonitor() {
         (a.status === "WAITING" || a.status === "SERVING"),
     ).length;
 
-    const waitMins = patientsAhead * avgTime;
+    const breakAdditional = (queue?.breakInfo?.isOnBreak ? (queue?.breakInfo?.durationMinutes || 15) : 0);
+    const waitMins = Math.max(5, patientsAhead * avgTime + breakAdditional);
 
     if (patientsAhead === 1) {
       return {
         ahead: 1,
         estimatedMinutes: waitMins,
         step: 2,
-        statusText: "পরবর্তী রোগী (প্রস্তুত থাকুন)",
-        message: `আপনার সিরিয়াল খুব কাছাকাছি! চেম্বারের ওয়েটিং রুমে প্রস্তুত থাকুন (আনুমানিক ~${waitMins} মিনিট)।`,
+        statusText: queue?.breakInfo?.isOnBreak ? `পরবর্তী রোগী (বিরতি চলছে)` : "পরবর্তী রোগী (প্রস্তুত থাকুন)",
+        message: queue?.breakInfo?.isOnBreak
+          ? `ডাক্তার সাহেব বর্তমানে ${queue.breakInfo.reasonText}-তে আছেন। বিরতির পর আপনার সিরিয়াল ডাকা হবে (আনুমানিক ~${waitMins} মিনিট)।`
+          : `আপনার সিরিয়াল খুব কাছাকাছি! চেম্বারের ওয়েটিং রুমে প্রস্তুত থাকুন (আনুমানিক ~${waitMins} মিনিট)।`,
         color: "antd-tag-orange",
       };
     }
@@ -129,8 +132,10 @@ export function LiveQueueMonitor() {
       ahead: patientsAhead,
       estimatedMinutes: waitMins,
       step: 1,
-      statusText: `সিরিয়াল কিউতে আছেন (${patientsAhead} জন পূর্বে)`,
-      message: `আপনার আগে ${patientsAhead} জন রোগী চিকিৎসাধীন ও অপেক্ষমাণ আছেন। আনুমানিক অপেক্ষা: ~${waitMins} মিনিট।`,
+      statusText: queue?.breakInfo?.isOnBreak ? `সিরিয়াল কিউতে আছেন (বিরতি চলছে)` : `সিরিয়াল কিউতে আছেন (${patientsAhead} জন পূর্বে)`,
+      message: queue?.breakInfo?.isOnBreak
+        ? `বর্তমানে চেম্বারে ${queue.breakInfo.reasonText} চলছে (পুনরায় শুরু: ${queue.breakInfo.expectedResumeTime})। আপনার পূর্বে ${patientsAhead} জন রোগী আছেন। মোট আনুমানিক অপেক্ষা: ~${waitMins} মিনিট।`
+        : `আপনার আগে ${patientsAhead} জন রোগী চিকিৎসাধীন ও অপেক্ষমাণ আছেন। আনুমানিক অপেক্ষা: ~${waitMins} মিনিট।`,
       color: "antd-tag-blue",
     };
   };
@@ -246,6 +251,45 @@ export function LiveQueueMonitor() {
           </Link>
         </div>
       </div>
+
+      {/* Chamber Break Banner (Anxiety-Free Patient Notification) */}
+      {queue?.breakInfo?.isOnBreak && (
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/15 border border-amber-500/30 shadow-xs animate-in fade-in slide-in-from-top-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-300 flex items-center justify-center text-2xl shrink-0">
+                ☕
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="antd-tag antd-tag-gold py-0.5 px-2 text-[10px] font-bold uppercase">
+                    চেম্বার সাময়িক বিরতি
+                  </span>
+                  <span className="font-bold text-sm sm:text-base text-[var(--antd-text)]">
+                    {queue.breakInfo.reasonText || "ডাক্তার সাহেব সাময়িক বিরতিতে আছেন"}
+                  </span>
+                </div>
+                <p className="text-xs text-[var(--antd-text-secondary)]">
+                  রোগী দেখা সাময়িকভাবে স্থগিত আছে। নির্ধারিত সময়ে পুনরায় পরবর্তী সিরিয়াল ডাকা শুরু হবে।
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3 rounded-xl bg-[var(--antd-bg-container)] border border-amber-500/30 text-center sm:text-right shrink-0">
+              <span className="text-[10px] uppercase font-bold text-[var(--antd-text-tertiary)] block">
+                পুনরায় শুরু হওয়ার সম্ভাব্য সময়
+              </span>
+              <span className="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400 flex items-center justify-center sm:justify-end gap-1.5 mt-0.5">
+                <Clock className="w-4 h-4 text-amber-500" />
+                {queue.breakInfo.expectedResumeTime || "শীঘ্রই"}
+              </span>
+              <span className="text-[10px] font-medium text-[var(--antd-text-secondary)] block">
+                (স্থায়িত্ব: ~{queue.breakInfo.durationMinutes} মিনিট)
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 2. Main Live Chamber Display (High-End Hospital Board Card) */}
       <div className="bg-[var(--antd-bg-container)] border border-[var(--antd-border-split)] rounded-2xl p-4 sm:p-6 shadow-xs">

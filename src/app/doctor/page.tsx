@@ -26,13 +26,41 @@ const { Title, Paragraph, Text } = Typography;
 
 export default function DoctorProfilePage() {
   const scheduleDays = [
-    { day: "শনিবার", time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা", status: "নিয়মিত চেম্বার" },
-    { day: "রবিবার", time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা", status: "নিয়মিত চেম্বার" },
-    { day: "সোমবার", time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা", status: "নিয়মিত চেম্বার" },
-    { day: "মঙ্গলবার", time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা", status: "নিয়মিত চেম্বার" },
-    { day: "বুধবার", time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা", status: "নিয়মিত চেম্বার" },
-    { day: "বৃহস্পতিবার", time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা", status: "নিয়মিত চেম্বার" },
-    { day: "শুক্রবার", time: "সকাল ১০:০০ টা – দুপুর ১:০০ টা", status: "শুধু প্রি-বুকিং ও ইমার্জেন্সি" },
+    {
+      day: "শনিবার",
+      time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা",
+      status: "নিয়মিত চেম্বার",
+    },
+    {
+      day: "রবিবার",
+      time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা",
+      status: "নিয়মিত চেম্বার",
+    },
+    {
+      day: "সোমবার",
+      time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা",
+      status: "নিয়মিত চেম্বার",
+    },
+    {
+      day: "মঙ্গলবার",
+      time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা",
+      status: "নিয়মিত চেম্বার",
+    },
+    {
+      day: "বুধবার",
+      time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা",
+      status: "নিয়মিত চেম্বার",
+    },
+    {
+      day: "বৃহস্পতিবার",
+      time: "বিকাল ৫:০০ টা – রাত ৯:৩০ টা",
+      status: "নিয়মিত চেম্বার",
+    },
+    {
+      day: "শুক্রবার",
+      time: "সকাল ১০:০০ টা – দুপুর ১:০০ টা",
+      status: "শুধু প্রি-বুকিং ও ইমার্জেন্সি",
+    },
   ];
 
   return (
@@ -41,11 +69,9 @@ export default function DoctorProfilePage() {
 
       <main className="flex-1 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          
           {/* 1. Doctor Hero Profile Card */}
           <div className="bg-[var(--antd-bg-container)] border border-[var(--antd-border-split)] rounded-2xl p-6 sm:p-10 shadow-xs">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              
               {/* Left Column: Avatar & Quick Badges */}
               <div className="lg:col-span-4 flex flex-col items-center text-center space-y-4">
                 <div className="relative">
@@ -61,7 +87,7 @@ export default function DoctorProfilePage() {
 
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-black text-[var(--antd-text)]">
-                    ডা. আরিফ চৌধুরী
+                    ডা. আসিফ চৌধুরী
                   </h1>
                   <p className="text-xs sm:text-sm font-semibold text-[var(--antd-primary)] mt-1">
                     চিফ ডেন্টাল সার্জন ও এন্ডোডন্টিক বিশেষজ্ঞ
@@ -73,9 +99,24 @@ export default function DoctorProfilePage() {
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-2 pt-2">
-                  <Tag color="cyan" className="px-2.5 py-0.5 font-semibold text-xs">১০+ বছর অভিজ্ঞতা</Tag>
-                  <Tag color="blue" className="px-2.5 py-0.5 font-semibold text-xs">৫০০০+ সফল রুট ক্যানেল</Tag>
-                  <Tag color="purple" className="px-2.5 py-0.5 font-semibold text-xs">লেজার ডেন্টিস্ট্রি সার্টিফাইড</Tag>
+                  <Tag
+                    color="cyan"
+                    className="px-2.5 py-0.5 font-semibold text-xs"
+                  >
+                    ১০+ বছর অভিজ্ঞতা
+                  </Tag>
+                  <Tag
+                    color="blue"
+                    className="px-2.5 py-0.5 font-semibold text-xs"
+                  >
+                    ৫০০০+ সফল রুট ক্যানেল
+                  </Tag>
+                  <Tag
+                    color="purple"
+                    className="px-2.5 py-0.5 font-semibold text-xs"
+                  >
+                    লেজার ডেন্টিস্ট্রি সার্টিফাইড
+                  </Tag>
                 </div>
               </div>
 
@@ -89,7 +130,12 @@ export default function DoctorProfilePage() {
                     আধুনিক ও ব্যথামুক্ত ডেন্টাল চিকিৎসার অঙ্গীকার
                   </h2>
                   <p className="text-xs sm:text-sm text-[var(--antd-text-secondary)] leading-relaxed">
-                    ডা. আরিফ চৌধুরী ঢাকা ডেন্টাল কলেজ থেকে বিডিএস সম্পন্ন করার পর উন্নত এন্ডোডন্টিক্স (রুট ক্যানেল), ডিজিটাল স্মাইল ডিজাইন ও ডেন্টাল ইমপ্ল্যান্টের উপর উচ্চতর প্রশিক্ষণ গ্রহণ করেছেন। তিনি বিগত এক দশকেরও বেশি সময় ধরে আধুনিক ও আন্তর্জাতিক মানের জীবাণুমুক্ত পরিবেশে ব্যথামুক্ত চিকিৎসা সেবা প্রদান করে আসছেন।
+                    ডা. আসিফ চৌধুরী ঢাকা ডেন্টাল কলেজ থেকে বিডিএস সম্পন্ন করার
+                    পর উন্নত এন্ডোডন্টিক্স (রুট ক্যানেল), ডিজিটাল স্মাইল ডিজাইন
+                    ও ডেন্টাল ইমপ্ল্যান্টের উপর উচ্চতর প্রশিক্ষণ গ্রহণ করেছেন।
+                    তিনি বিগত এক দশকেরও বেশি সময় ধরে আধুনিক ও আন্তর্জাতিক মানের
+                    জীবাণুমুক্ত পরিবেশে ব্যথামুক্ত চিকিৎসা সেবা প্রদান করে
+                    আসছেন।
                   </p>
                 </div>
 
@@ -104,7 +150,9 @@ export default function DoctorProfilePage() {
                       <li>BDS (Dhaka University)</li>
                       <li>PGT (Endodontics & Conservative Dentistry)</li>
                       <li>Advanced Training in Laser Dentistry (India)</li>
-                      <li>Fellow, International Congress of Oral Implantologists</li>
+                      <li>
+                        Fellow, International Congress of Oral Implantologists
+                      </li>
                     </ul>
                   </div>
 
@@ -142,15 +190,12 @@ export default function DoctorProfilePage() {
                     <span>WhatsApp-এ সরাসরি কথা বলুন</span>
                   </a>
                 </div>
-
               </div>
-
             </div>
           </div>
 
           {/* 2. Chamber Schedule & Visit Guidelines */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
             {/* Chamber Timing Table */}
             <div className="lg:col-span-7 bg-[var(--antd-bg-container)] border border-[var(--antd-border-split)] rounded-2xl p-6 shadow-xs space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-[var(--antd-border-split)]">
@@ -160,10 +205,13 @@ export default function DoctorProfilePage() {
                     <span>সাপ্তাহিক চেম্বার সময়সূচি</span>
                   </h3>
                   <p className="text-xs text-[var(--antd-text-secondary)]">
-                    রোগীদের সুবিধার জন্য ডিজিটাল সিরিয়াল পদ্ধতিতে সিরিয়াল অনুযায়ী রোগী দেখা হয়।
+                    রোগীদের সুবিধার জন্য ডিজিটাল সিরিয়াল পদ্ধতিতে সিরিয়াল
+                    অনুযায়ী রোগী দেখা হয়।
                   </p>
                 </div>
-                <Tag color="success" className="font-bold text-xs">আজ চেম্বার খোলা</Tag>
+                <Tag color="success" className="font-bold text-xs">
+                  আজ চেম্বার খোলা
+                </Tag>
               </div>
 
               <div className="space-y-2">
@@ -188,7 +236,9 @@ export default function DoctorProfilePage() {
               <div className="p-3 bg-blue-500/5 rounded-xl border border-blue-500/15 text-xs text-[var(--antd-text-secondary)] flex items-start gap-2">
                 <Sparkles className="w-4 h-4 text-[var(--antd-primary)] shrink-0 mt-0.5" />
                 <span>
-                  <strong>পরামর্শ:</strong> ভিড় এড়াতে আসার পূর্বে অনলাইনে সিরিয়াল সংগ্রহ করার অনুরোধ করা যাচ্ছে। লাইভ সিরিয়াল পেজে আপনার টোকেন অগ্রগতি দেখতে পারবেন।
+                  <strong>পরামর্শ:</strong> ভিড় এড়াতে আসার পূর্বে অনলাইনে
+                  সিরিয়াল সংগ্রহ করার অনুরোধ করা যাচ্ছে। লাইভ সিরিয়াল পেজে আপনার
+                  টোকেন অগ্রগতি দেখতে পারবেন।
                 </span>
               </div>
             </div>
@@ -203,7 +253,7 @@ export default function DoctorProfilePage() {
 
                 <div className="space-y-2 text-xs text-[var(--antd-text-secondary)]">
                   <p className="font-bold text-sm text-[var(--antd-text)]">
-                    ডা. আরিফ ডেন্টাল কেয়ার অ্যান্ড ইমপ্ল্যান্ট সেন্টার
+                    ডা. আসিফ ডেন্টাল কেয়ার অ্যান্ড ইমপ্ল্যান্ট সেন্টার
                   </p>
                   <p>
                     🏢 রুম #৪০২ (৪র্থ তলা), সিটি সেন্টার প্লাজা,
@@ -218,10 +268,12 @@ export default function DoctorProfilePage() {
 
                 <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20 text-xs text-emerald-800 dark:text-emerald-300 space-y-1">
                   <p className="font-bold flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4" /> ১০০% সার্বক্ষণিক এসি ও আধুনিক লিফট সুবিধা
+                    <CheckCircle2 className="w-4 h-4" /> ১০০% সার্বক্ষণিক এসি ও
+                    আধুনিক লিফট সুবিধা
                   </p>
                   <p className="text-[11px] opacity-90">
-                    ভবনের নিচে রোগীদের জন্য পর্যাপ্ত পার্কিং এর সুব্যবস্থা রয়েছে।
+                    ভবনের নিচে রোগীদের জন্য পর্যাপ্ত পার্কিং এর সুব্যবস্থা
+                    রয়েছে।
                   </p>
                 </div>
               </div>
@@ -234,9 +286,7 @@ export default function DoctorProfilePage() {
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
-
           </div>
-
         </div>
       </main>
 
